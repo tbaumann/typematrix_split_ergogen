@@ -1,0 +1,560 @@
+units:
+  kx: cx
+  ky: cy
+  px: cx
+  py: cy
+  kxo: 0.5 * cx
+  kyo: 0.5 * cy
+  
+  # Font units
+  font_x: 1
+  font_y: 1
+  font_xo: 0.5 font_x
+  font_yo: 0.5 * font_y
+
+  # Nice Nano
+  # The nice nano footprint's center doesn't account
+  # for the 2.54mm "overhang" of the PCB beyond the pins.
+  mcu_overhang_y: 2.54
+  mcu_spacing_x: 2.72
+  mcu_x: 17.78 + mcu_spacing_x
+  mcu_y: 30.48 + mcu_overhang_y
+  mcu_xo: 0.5 * mcu_x
+  mcu_yo: 0.5 * mcu_y + 0.5 * mcu_overhang_y
+
+  # Nice!View display
+  disp_x: 14
+  disp_y: 36
+  disp_jumper_y: 2.6
+  disp_xo: 0.5 * disp_x
+  disp_yo: 0.5 * disp_y
+
+  # Battery Connector
+  batc_x: 4.3
+  batc_y: 4.6
+  batc_xo: 0.5 * batc_x
+  batc_yo: 0.5 * batc_y
+
+  # Battery Pads
+  batp_x: 3.75
+  batp_y: 2.5
+  batp_xo: 0.5 * batp_x
+  batp_yo: 0.5 * batp_y
+
+  # Power Switch
+  sw_power_x: 3.1
+  sw_power_y: 8.3
+  sw_power_xo: 0.5 * sw_power_x
+  sw_power_yo: 0.5 * sw_power_y
+
+  # Reset Switch
+  sw_reset_x: 3.4
+  sw_reset_y: 5
+  sw_reset_xo: 0.5 * sw_reset_x
+  sw_reset_yo: 0.5 * sw_reset_y
+
+points:
+  key:
+    padding: ky
+    spread: kx
+    width: kx
+    height: ky
+  zones:
+    matrix:
+      # Fix placement on KiCAD sheet.
+      anchor:
+        shift: [35, -100]
+      key.tags: key
+      columns:
+        left: 
+          key: 
+            spread: cx * 0.25
+            width: cx * 1.5
+            asym: left
+            column_net: C0
+        q:
+          key:
+            spread: cx * 1.25
+            column_net: C1
+        w:
+          key.column_net: C2
+        e:
+          key.column_net: C3
+        r:
+          key.column_net: C4
+        t:
+          key.column_net: C5
+
+      rows:
+        bottom:
+          row_net: R4
+        home:
+          row_net: R3
+        top:
+          row_net: R2
+        num:
+          row_net: R1
+        f:
+          row_net: R0
+
+    leftcluster:
+      key:
+        spread: cx * 1.5
+        width: cx * 1.5
+        kx: cx * 1.5
+        asym: left
+        tags: key
+      anchor:
+        ref: matrix_left_bottom
+        shift: [0, -2cy]
+      columns:
+        one:
+          key.column_net: C0
+        two:
+          key.column_net: C1
+        three:
+          key.column_net: C2
+      rows:
+        down:        
+          row_net: R7
+        up:
+          row_net: R6
+    rightcluster:
+      key:
+        asym: right
+        tags: key
+      anchor:
+        ref: matrix_left_bottom
+        shift: [0.25 * cx, -2cy]
+      columns:
+        one:
+          key.column_net: C0
+        two:
+          key.column_net: C1
+        three:
+          key.column_net: C2
+      rows:
+        down:        
+          row_net: R7
+        up:
+          row_net: R7
+      
+    bigenters:
+      key:
+        spread: cx * 1.5
+        width: cx * 1.5
+        kx: cx * 1.5
+        padding: 2cy
+        height: 2cy
+        tags: [key, enter]
+        
+      anchor:
+        ref: matrix_t_top
+        shift: [cx * 1.25, -1.5cy]
+      columns:
+        one:
+          key.column_net: C6
+      rows:
+        enter:
+          row_net: R2
+        back:
+          padding: cy * 1.5
+          row_net: R1
+        f:
+          height: cy
+          tags: key
+          row_net: R0
+    spaces:
+      key.tags: key
+      anchor:
+        ref: leftcluster_three_up
+        shift: [0.25 * cx  , 0]
+      columns:
+        alt:
+          key:
+            asym: right
+            column_net: C3
+        space:
+          key:
+            width: 3.5cx
+            spread: 2.25cx
+            column_net: C4
+            tags: [key,space]
+      rows:
+        space:
+          row_net: R6
+    rightsym:
+      anchor:
+        ref: matrix_q_bottom
+        shift: [-cx, 0]
+      key:
+        asym: right
+        tags: key
+      columns:
+        sym:
+          key.column_net: C0
+      rows:
+        bottom:
+          row_net: R4
+        home:
+          row_net: R3
+        top:
+          row_net: R2
+        num:
+          row_net: R1
+        f:
+          row_net: R0
+    right:
+      anchor:
+        ref: rightsym_sym_bottom
+        shift: [-cx * 1.25 , -2cy]
+      key:
+        asym: right
+        spread: cx * 1.5 
+        width: cx * 1.5
+        kx: cx * 1.5    
+        tags: key
+      columns:
+        sym:
+          key.column_net: C7
+      rows:
+        ctl_down:
+          row_net: R6
+        ctl_up:
+          row_net: R5
+        bottom:
+          row_net: R4
+        home:
+          row_net: R3
+        top:
+          row_net: R2
+        num:
+          row_net: R1
+        f:
+          row_net: R0
+
+    #
+    #  Controller
+    #
+    controller:
+      anchor:
+        ref: bigenters_one_f
+        shift: [0.75 * kx + mcu_xo, kyo -2.25 - mcu_yo]
+      key:
+        name: mcu
+        width: mcu_x
+        height: mcu_y
+
+
+
+  mirror: &mirror
+    ref: bigenters_one_f
+    distance: 100
+outlines:
+  keys:
+    - what: rectangle
+      where: [key]
+      size: [kx - 3, ky - 5] # FIXME hole sizes
+
+  plateoutline:
+    - what: polygon
+      operation: stack
+      fillet: 2
+      points:
+        - ref: matrix_left_f
+          shift: [-cx * 0.75, cy * 0.5]
+        - ref: bigenters_one_f
+          shift: [cx * 0.75, cy * 0.5]
+        - ref: spaces_space_space
+          shift: [cx * 1.75, -cy * 0.5]
+        - ref: leftcluster_three_down
+          shift: [cx * 0.75 , cy * 0.5]
+        - ref: leftcluster_three_down
+          shift: [cx * 0.75 , -cy * 0.5]
+        - ref: leftcluster_one_down
+          shift: [-cx * 0.75, -cy * 0.5]
+
+  mirrorplateoutline:
+    - what: polygon
+      operation: stack
+      fillet: 2
+      points:
+        - ref: mirror_rightsym_sym_f
+          shift: [-cx * 2, cy * 0.5]
+        - ref: mirror_bigenters_one_f
+          shift: [cx * 0.75, cy * 0.5]
+        - ref: mirror_spaces_space_space
+          shift: [cx * 1.75, -cy * 0.5]
+        - ref: mirror_rightcluster_three_down
+          shift: [cx * 0.75 , cy * 0.5]
+        - ref: mirror_rightcluster_three_down
+          shift: [cx * 0.75 , -cy * 0.5]
+        - ref: mirror_rightcluster_one_down
+          shift: [-cx * 2, -cy * 0.5]
+
+
+  # Combination preview showing outline and keys.
+  topleft:
+    - name: plateoutline
+    - operation: subtract
+      name: keys
+
+  topright:
+    - name: mirrorplateoutline
+    - operation: subtract
+      name: keys
+    
+  mcuears:
+    - what: rectangle
+      size: [mcu_x +10 , 6cy]
+      fillet: 2
+
+  pcb_left:
+    - name: plateoutline
+    - operation: add
+      name: mcuears
+      where: 
+        ref: bigenters_one_f
+        shift: [0.75 * cx + mcu_x/2 -5, -2.5cy ]
+
+  pcb_right:
+    - name: mirrorplateoutline
+    - operation: add
+      name: mcuears
+      where: 
+        ref: mirror_bigenters_one_f
+        shift: [0.75 * cx + mcu_x/2 -5 , -2.5cy ]
+
+  toprightpcb:
+    - name: pcb_right
+    - operation: subtract
+      name: keys
+    
+  topleftpcb:
+    - name: pcb_left
+    - operation: subtract
+      name: keys
+
+  all:
+    - name: topleftpcb
+    - operation: stack
+      name: toprightpcb
+
+  pcb_both:
+    - name: pcb_left
+    - operation: stack
+      name: pcb_right
+
+pcbs:
+  left:
+    outlines:
+      left:
+        outline: pcb_left
+    footprints:
+      choc:
+        what: chocmini
+        where: 
+          - /^matrix_.*/
+          - /leftcluster_.*/
+          - [/^bigenters_.*/, key, -enter]
+          - /^spaces_.*/
+        params:
+          keycaps: true
+          reverse: false
+          from: "{{colrow}}"
+          to: "{{column_net}}"
+      choc_enter:
+        what: chocmini
+        where: 
+          - [/^bigenters_.*/, enter]
+        params:
+          keycaps: true
+          reverse: false
+          from: "{{colrow}}"
+          to: "{{column_net}}"
+        adjust:
+          rotate: 90
+      diode:
+        what: diode
+        where: 
+          - /^matrix_.*/
+          - /leftcluster_.*/
+          - /^bigenters_.*/
+          - /^spaces_.*/
+        params:
+          from: "{{colrow}}"
+          to: "{{row_net}}"
+        adjust:
+          shift: [-8, 0]
+          rotate: 270
+      # Controller Area
+      promicro:
+        what: promicro
+        params:
+          # Pin Assignments (Controller on top facing down)
+          # Right Side
+          P0: 'DPD'   # Display Data
+          P1: 'DPC'   # Display Clock
+          # GND
+          # GND
+          P2: 'DPE'   # Display CS (nice!view only) FIXME? ZPM default?
+          P3: 'R1'    # Row
+          P4: 'R2'    # Row
+          P5: 'R3'    # Row
+          P6: 'R4'    # Row
+          P7: 'R5'    # Row
+          P8: 'R6'    # Row
+          P9: 'R7'    # Row
+
+          # Left Side
+          RAW: 'BAT_P'       # Battery Pos
+          # GND       # Ground / Battery Neg
+          # RST       # Reset pin
+          # VCC       # External Power
+          P21: 'C0'   # Column
+          P20: 'C1'   # Column
+          P19: 'C2'   # Column
+          P18: 'C3'   # Column
+          P15: 'C4'   # Column
+          P14: 'C5'   # Column
+          P16: 'C6'   # Column
+          P10: 'F10'  # Free
+
+        where:
+          ref: mcu
+          shift: [0,0]
+          rotate: -90
+      display:
+        what: nice_view
+        params:
+          reverse: true
+          MOSI: DPD
+          SCK: DPC
+          CS: DPE
+          show_labels: false
+          jumpers_at_bottom: false
+        where:
+          ref: mcu
+          shift: [0, -1] # Move the display down a bit to be sure the cable fits between the headers
+      pads_bat:
+        what: jstph
+        params:
+          pos: BAT_P
+          neg: GND
+        where:
+          ref: mcu
+          shift: [-batc_x, -mcu_y/2 - 5]
+          #rotate: 270
+      reset:
+        what: button
+        params:
+          from: GND
+          to: RST
+        where:
+          ref: mcu
+          shift: [batc_x, -mcu_y/2 - 8]
+
+  right:
+    outlines:
+      right:
+        outline: pcb_right
+    footprints:
+      choc:
+        what: chocmini
+        where: 
+          - [/^mirror.*/, key, -enter]
+          - /rightcluster_.*/
+        params:
+          keycaps: true
+          reverse: false
+          from: "{{colrow}}"
+          to: "{{column_net}}"
+      choc_enter:
+        what: chocmini
+        where: 
+          - [/^mirror.*/, key, enter]
+        params:
+          keycaps: true
+          reverse: false
+          from: "{{colrow}}"
+          to: "{{column_net}}"
+        adjust:
+          rotate: 270
+      diode:
+        what: diode
+        where: 
+          - [/^mirror.*/, key ]
+          - /rightcluster_.*/
+        params:
+          from: "{{colrow}}"
+          to: "{{row_net}}"
+        adjust:
+          shift: [-8, 0]
+          rotate: 90
+      # Controller Area
+      promicro:
+        what: promicro
+        params:
+          # Pin Assignments (Controller on top facing down)
+          # Right Side
+          P0: 'DPD'   # Display Data
+          P1: 'DPC'   # Display Clock
+          # GND
+          # GND
+          P2: 'DPE'   # Display CS (nice!view only) FIXME? ZPM default?
+          P3: 'R1'    # Row
+          P4: 'R2'    # Row 
+          P5: 'R3'    # Row 
+          P6: 'R4'    # Row 
+          P7: 'R5'    # Row 
+          P8: 'R6'    # Row
+          P9: 'R7'    # Row
+
+          # Left Side
+          RAW: 'BAT_P'       # Battery Pos
+          # GND       # Ground / Battery Neg
+          # RST       # Reset pin
+          # VCC       # External Power
+          P21: 'C0'   # Column 
+          P20: 'C1'   # Column 
+          P19: 'C2'   # Column 
+          P18: 'C3'   # Column 
+          P15: 'C4'   # Column 
+          P14: 'C5'   # Column 
+          P16: 'C6'   # Column
+          P10: 'C7'   # Column
+
+        where:
+          ref: mirror_mcu
+          shift: [0,0]
+          rotate: 90
+
+      display:
+        what: nice_view
+        params:
+          reverse: true
+          MOSI: DPD
+          SCK: DPC
+          CS: DPE
+          show_labels: false
+          jumpers_at_bottom: false
+        where:
+          ref: mirror_mcu
+          shift: [0, -1] # Move the display down a bit to be sure the cable fits between the headers
+      pads_bat:
+        what: jstph
+        params:
+          pos: BAT_P
+          neg: GND
+        where:
+          ref: mirror_mcu
+          shift: [-batc_x, -mcu_y/2 - 5]
+          #rotate: 270
+      reset:
+        what: button
+        params:
+          from: GND
+          to: RST
+        where:
+          ref: mirror_mcu
+          shift: [batc_x, -mcu_y/2 - 8]
