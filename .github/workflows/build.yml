@@ -20,14 +20,10 @@ jobs:
         uses: ./.github/actions/export-dsn
         with:
           boards: left right
-          pcb_file: output/pcbs/left.kicad_pcb
-          dsn_file: output/pcbs/left.dsn
       - name: Autoroute PCB
         uses: ./.github/actions/autoroute
         with:
           boards: left right
-          dsn_file: output/pcbs/left.dsn
-          ses_file: output/pcbs/left.ses
       - name: Import SES
         uses: ./.github/actions/import-ses
         with:
