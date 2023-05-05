@@ -376,16 +376,82 @@ pcbs:
         where: 
           - /^matrix_.*/
           - /leftcluster_.*/
-          - /^bigenters_.*/
           - /^spaces_.*/
+          - [/^bigenters_.*/, key, -enter]
         params:
           from: "{{colrow}}"
           to: "{{row_net}}"
-          tht: false # No true hole
+          tht: false # No through hole
           side: B    # Bottom only
         adjust:
-          shift: [-8, 0]
+          shift: [-1.4, -6]
+          rotate: 180
+      diode_enters:
+        what: diode
+        where: 
+          - [/^bigenters_.*/, enter]
+        params:
+          from: "{{colrow}}"
+          to: "{{row_net}}"
+          tht: false # No through hole
+          side: B    # Bottom only
+        adjust:
+          shift: [6, -1.4]
           rotate: 270
+      backlight:
+        what: diode ## Fixme use LED 
+        where: 
+          - /^matrix_.*/
+          - /leftcluster_.*/
+          - [/^bigenters_.*/, key, -enter]
+          - /^spaces_.*/
+        params:
+          from:  "bl_{{colrow}}{{row_net}}"
+          to: GND 
+          tht: false # No through hole
+          side: F    # Top only
+        adjust:
+          shift: [0, 4.3]
+          rotate: 0
+      backlight_enters:
+        what: diode ## Fixme use LED 
+        where: 
+          - [/^bigenters_.*/, enter]
+        params:
+          from:  "bl_{{colrow}}{{row_net}}"
+          to: GND 
+          tht: false # No through hole
+          side: F    # Top only
+        adjust:
+          shift: [-4.3,0]
+          rotate: 90
+      resistor_backlight:
+        what: diode ## Fixme use resistor 
+        where: 
+          - /^matrix_.*/
+          - /leftcluster_.*/
+          - [/^bigenters_.*/, key, -enter]
+          - /^spaces_.*/
+        params:
+          from:  "bl_{{colrow}}{{row_net}}"
+          to: bl_pwr 
+          tht: false # No through hole
+          side: B    # Bottom only
+        adjust:
+          shift: [0, 4.3]
+          rotate: 0
+      resistor_backlight_enters:
+        what: diode ## Fixme use resistor 
+        where: 
+          - [/^bigenters_.*/, enter]
+        params:
+          from:  "bl_{{colrow}}{{row_net}}"
+          to: GND 
+          tht: false # No through hole
+          side: B    # Bottom only
+        adjust:
+          shift: [-4.3,0]
+          rotate: 90
       # Controller Area
       promicro:
         what: promicro
@@ -482,14 +548,78 @@ pcbs:
       diode:
         what: diode
         where: 
-          - [/^mirror.*/, key]
+          - [/^mirror.*/, key, -enter ]
           - /rightcluster_.*/
         params:
           from: "{{colrow}}"
           to: "{{row_net}}"
+          tht: false # No through hole
+          side: B    # Bottom only
         adjust:
-          shift: [-8, 0]
+          shift: [1.4, -6]
+          rotate: 180
+      diode_enters:
+        what: diode
+        where: 
+          - [/^mirror.*/, key, enter]
+        params:
+          from: "{{colrow}}"
+          to: "{{row_net}}"
+          tht: false # No through hole
+          side: B    # Bottom only
+        adjust:
+          shift: [-6, -1.4]
           rotate: 90
+      backlight:
+        what: diode ## Fixme use LED 
+        where: 
+          - [/^mirror.*/, key, -enter ]
+          - /rightcluster_.*/
+        params:
+          from:  "bl_{{colrow}}{{row_net}}"
+          to: GND 
+          tht: false # No through hole
+          side: F    # Top only
+        adjust:
+          shift: [0, 4.3]
+          rotate: 0
+      backlight_enters:
+        what: diode ## Fixme use LED 
+        where: 
+          - [/^mirror.*/, key, enter]
+        params:
+          from:  "bl_{{colrow}}{{row_net}}"
+          to: GND 
+          tht: false # No through hole
+          side: F    # Top only
+        adjust:
+          shift: [4.3,0]
+          rotate: 270
+      resistor_backlight:
+        what: diode ## Fixme use Resistor 
+        where: 
+          - [/^mirror.*/, key, -enter ]
+          - /rightcluster_.*/
+        params:
+          from:  "bl_{{colrow}}{{row_net}}"
+          to: bl_pwr 
+          tht: false # No through hole
+          side: B    # Bottom only
+        adjust:
+          shift: [0, 4.3]
+          rotate: 0
+      resistor_backlight_enters:
+        what: diode ## Fixme use resistor 
+        where: 
+          - [/^mirror.*/, key, enter]
+        params:
+          from:  "bl_{{colrow}}{{row_net}}"
+          to: bl_pwr 
+          tht: false # No through hole
+          side: B    # Bottom only
+        adjust:
+          shift: [4.3,0]
+          rotate: 270
       # Controller Area
       promicro:
         what: promicro
