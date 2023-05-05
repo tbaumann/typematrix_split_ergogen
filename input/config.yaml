@@ -1,10 +1,10 @@
 units:
   kx: cx
   ky: cy
-  px: cx
-  py: cy
-  kxo: 0.5 * cx
-  kyo: 0.5 * cy
+  px: kx
+  py: ky
+  kxo: 0.5 * kx
+  kyo: 0.5 * ky
 
   # Font units
   font_x: 1
@@ -68,13 +68,13 @@ points:
       columns:
         left:
           key:
-            spread: cx * 0.25
-            width: cx * 1.5
+            spread: kx * 0.25
+            width: kx * 1.5
             asym: left
             column_net: C0
         q:
           key:
-            spread: cx * 1.25
+            spread: kx * 1.25
             column_net: C1
         w:
           key.column_net: C2
@@ -99,14 +99,14 @@ points:
 
     leftcluster:
       key:
-        spread: cx * 1.5
-        width: cx * 1.5
-        kx: cx * 1.5
+        spread: kx * 1.5
+        width: kx * 1.5
+        kx: kx * 1.5
         asym: left
         tags: key
       anchor:
         ref: matrix_left_bottom
-        shift: [0, -2cy]
+        shift: [0, -2ky]
       columns:
         one:
           key.column_net: C0
@@ -125,7 +125,7 @@ points:
         tags: key
       anchor:
         ref: matrix_left_bottom
-        shift: [0.25 * cx, -2cy]
+        shift: [0.25 * kx, -2ky]
       columns:
         one:
           key.column_net: C0
@@ -141,16 +141,16 @@ points:
 
     bigenters:
       key:
-        spread: cx * 1.5
-        width: cx * 1.5
-        kx: cx * 1.5
-        padding: 2cy
-        height: 2cy
+        spread: kx * 1.5
+        width: kx * 1.5
+        kx: kx * 1.5
+        padding: 2ky
+        height: 2ky
         tags: [key, enter]
 
       anchor:
         ref: matrix_t_top
-        shift: [cx * 1.25, -1.5cy]
+        shift: [kx * 1.25, -1.5ky]
       columns:
         one:
           key.column_net: C6
@@ -158,17 +158,17 @@ points:
         enter:
           row_net: R2
         back:
-          padding: cy * 1.5
+          padding: ky * 1.5
           row_net: R1
         f:
-          height: cy
+          height: ky
           tags: key
           row_net: R0
     spaces:
       key.tags: key
       anchor:
         ref: leftcluster_three_up
-        shift: [0.25 * cx, 0]
+        shift: [0.25 * kx, 0]
       columns:
         alt:
           key:
@@ -176,8 +176,8 @@ points:
             column_net: C3
         space:
           key:
-            width: 3.5cx
-            spread: 2.25cx
+            width: 3.5kx
+            spread: 2.25kx
             column_net: C4
             tags: [key, space]
       rows:
@@ -186,7 +186,7 @@ points:
     rightsym:
       anchor:
         ref: matrix_q_bottom
-        shift: [-cx, 0]
+        shift: [-kx, 0]
       key:
         asym: right
         tags: key
@@ -207,12 +207,12 @@ points:
     right:
       anchor:
         ref: rightsym_sym_bottom
-        shift: [-cx * 1.25, -2cy]
+        shift: [-kx * 1.25, -2ky]
       key:
         asym: right
-        spread: cx * 1.5
-        width: cx * 1.5
-        kx: cx * 1.5
+        spread: kx * 1.5
+        width: kx * 1.5
+        kx: kx * 1.5
         tags: key
       columns:
         sym:
@@ -259,17 +259,17 @@ outlines:
       fillet: 2
       points:
         - ref: matrix_left_f
-          shift: [-cx * 0.75, cy * 0.5]
+          shift: [-kx * 0.75, ky * 0.5]
         - ref: bigenters_one_f
-          shift: [cx * 0.75, cy * 0.5]
+          shift: [kx * 0.75, ky * 0.5]
         - ref: spaces_space_space
-          shift: [cx * 1.75, -cy * 0.5]
+          shift: [kx * 1.75, -ky * 0.5]
         - ref: leftcluster_three_down
-          shift: [cx * 0.75, cy * 0.5]
+          shift: [kx * 0.75, ky * 0.5]
         - ref: leftcluster_three_down
-          shift: [cx * 0.75, -cy * 0.5]
+          shift: [kx * 0.75, -ky * 0.5]
         - ref: leftcluster_one_down
-          shift: [-cx * 0.75, -cy * 0.5]
+          shift: [-kx * 0.75, -ky * 0.5]
 
   mirrorplateoutline:
     - what: polygon
@@ -277,17 +277,17 @@ outlines:
       fillet: 2
       points:
         - ref: mirror_rightsym_sym_f
-          shift: [-cx * 2, cy * 0.5]
+          shift: [-kx * 2, ky * 0.5]
         - ref: mirror_bigenters_one_f
-          shift: [cx * 0.75, cy * 0.5]
+          shift: [kx * 0.75, ky * 0.5]
         - ref: mirror_spaces_space_space
-          shift: [cx * 1.75, -cy * 0.5]
+          shift: [kx * 1.75, -ky * 0.5]
         - ref: mirror_rightcluster_three_down
-          shift: [cx * 0.75, cy * 0.5]
+          shift: [kx * 0.75, ky * 0.5]
         - ref: mirror_rightcluster_three_down
-          shift: [cx * 0.75, -cy * 0.5]
+          shift: [kx * 0.75, -ky * 0.5]
         - ref: mirror_rightcluster_one_down
-          shift: [-cx * 2, -cy * 0.5]
+          shift: [-kx * 2, -ky * 0.5]
 
   # Combination preview showing outline and keys.
   topleft:
@@ -302,7 +302,7 @@ outlines:
 
   mcuears:
     - what: rectangle
-      size: [mcu_x +10, 6cy]
+      size: [mcu_x +10, 6ky]
       fillet: 2
 
   pcb_left:
@@ -311,7 +311,7 @@ outlines:
       name: mcuears
       where:
         ref: bigenters_one_f
-        shift: [0.75 * cx + mcu_x/2 -5, -2.5cy]
+        shift: [0.75 * kx + mcu_x/2 -5, -2.5ky]
 
   pcb_right:
     - name: mirrorplateoutline
@@ -319,7 +319,7 @@ outlines:
       name: mcuears
       where:
         ref: mirror_bigenters_one_f
-        shift: [0.75 * cx + mcu_x/2 -5, -2.5cy]
+        shift: [0.75 * kx + mcu_x/2 -5, -2.5ky]
 
   toprightpcb:
     - name: pcb_right
