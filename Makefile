@@ -25,10 +25,10 @@ output/routed_pcbs/%.ses: output/pcbs/%.dsn
 output/routed_pcbs/%.kicad_pcb: output/routed_pcbs/%.ses output/pcbs/%.kicad_pcb
 	mkdir -p $(shell dirname $@)
 	# file can not be present or the script will refuse to run
-	if [ -f "$@" ] ; then rm $@ ; fi
+	if [ -f "$@" ] ; then rm -f $@ ; fi
 	${container_cmd} run ${container_args} soundmonster/kicad-automation-scripts:latest /usr/lib/python2.7/dist-packages/kicad-automation/pcbnew_automation/import_ses.py output/pcbs/$*.kicad_pcb $< --output-file $@
 
-output/routed_pcbs/%-drc/: output/routed_pcbs/%.kicad_pcb
+output/routed_pcbs/%-drc/drc_result.rpt: output/routed_pcbs/%.kicad_pcb
 	mkdir -p $@
 	${container_cmd} run ${container_args} soundmonster/kicad-automation-scripts:latest /usr/lib/python2.7/dist-packages/kicad-automation/pcbnew_automation/run_drc.py  $< $@
 
@@ -56,6 +56,8 @@ clean:
 	rm -rf output
 
 all: \
+	output/routed_pcbs/left-drc/drc_result.rpt \
+	output/routed_pcbs/right-drc/drc_result.rpt \
 	output/routed_pcbs/left-front.png \
 	output/routed_pcbs/left-back.png \
 	output/routed_pcbs/right-front.png \
