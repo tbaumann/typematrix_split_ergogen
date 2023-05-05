@@ -17,4 +17,6 @@ runs:
     - |
       mkdir -p $HOME/.config/kicad ;
       cp /root/.config/kicad/* $HOME/.config/kicad ;
+      gsettings set org.gnome.desktop.privacy remember-recent-files false
       /usr/lib/python2.7/dist-packages/kicad-automation/pcbnew_automation/export_dsn.py ${{ inputs.pcb_file }} ${{ inputs.dsn_file }}
+      ls -lh ${{ inputs.pcb_file }} ${{ inputs.dsn_file }}
