@@ -233,7 +233,6 @@ points:
         f:
           row_net: R0
 
-    #
     #  Controller
     #
     controller:
@@ -244,8 +243,6 @@ points:
         name: mcu
         width: mcu_x
         height: mcu_y
-
-
 
   mirror: &mirror
     ref: bigenters_one_f
@@ -384,6 +381,8 @@ pcbs:
         params:
           from: "{{colrow}}"
           to: "{{row_net}}"
+          tht: false # No true hole
+          side: B    # Bottom only
         adjust:
           shift: [-8, 0]
           rotate: 270
@@ -462,7 +461,7 @@ pcbs:
       choc:
         what: chocmini
         where: 
-          - [/^mirror.*/, key, -enter]
+          - [/^mirror.*/, key, -enter ]
           - /rightcluster_.*/
         params:
           keycaps: true
@@ -483,7 +482,7 @@ pcbs:
       diode:
         what: diode
         where: 
-          - [/^mirror.*/, key ]
+          - [/^mirror.*/, key]
           - /rightcluster_.*/
         params:
           from: "{{colrow}}"
