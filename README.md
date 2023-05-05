@@ -33,10 +33,11 @@ The interesting thing about this keyboard is that it's a declarative design:
 * Remove or document magic numbers
 * Backlight
 * 3D models for 2x1.5u big enter key caps
-* SMD diodes
+* SMD footrints
 * Better nice!nano footprint, steal from https://github.com/bstiq/nice-nano-kicad
 * Middle bracked PCB with touchpad (Holds both halves together rigidly)
 * Align board edges with actual keycap size
+* stabilizer cutouts
 
 ## How to
 
