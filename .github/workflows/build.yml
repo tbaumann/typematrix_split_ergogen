@@ -48,6 +48,17 @@ jobs:
           pcb_input_file: output/pcbs/right.kicad_pcb
           pcb_output_file: output/pcbs/right_routed.kicad_pcb
           ses_file: output/pcbs/right.ses
+      - name: Left board DRC check
+        uses: ./.github/actions/run-drc
+        with:
+          pcb_input_file: output/pcbs/left_routed.kicad_pcb
+          drc_output: output/pcbs/left-drc/
+      - name: Right board DRC check
+        uses: ./.github/actions/run-drc
+        with:
+          pcb_input_file: output/pcbs/right_routed.kicad_pcb
+          drc_output: output/pcbs/right-drc/
+
       - name: Export Gerbers for Left PCB
         uses: ./.github/actions/export-gerbers
         with:
