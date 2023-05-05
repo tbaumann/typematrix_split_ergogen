@@ -1,5 +1,6 @@
 name: 'Export DSN'
 description: 'Export Specctra DSN from a Kicad PCB'
+inputs:
   board:
     description: 'Board name'
     required: true
