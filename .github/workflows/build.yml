@@ -16,66 +16,30 @@ jobs:
         run: npm install
       - name: Generate unrouted PCBs
         run: npm run gen
-#  autoroute:
-#    name: Autoroute
-#    runs-on: ubuntu-latest
-#    steps:
-      - name: Export DSN for Left PCB
+      - name: Export DSN 
         uses: ./.github/actions/export-dsn
         with:
+          boards: left right
           pcb_file: output/pcbs/left.kicad_pcb
           dsn_file: output/pcbs/left.dsn
-      - name: Export DSN for Right PCB
-        uses: ./.github/actions/export-dsn
-        with:
-          pcb_file: output/pcbs/right.kicad_pcb
-          dsn_file: output/pcbs/right.dsn
-      - name: Autoroute Left PCB
+      - name: Autoroute PCB
         uses: ./.github/actions/autoroute
         with:
+          boards: left right
           dsn_file: output/pcbs/left.dsn
           ses_file: output/pcbs/left.ses
-      - name: Autoroute Right PCB
-        uses: ./.github/actions/autoroute
-        with:
-          dsn_file: output/pcbs/right.dsn
-          ses_file: output/pcbs/right.ses
-      - name: Import SES into Left PCB
+      - name: Import SES
         uses: ./.github/actions/import-ses
         with:
-          pcb_input_file: output/pcbs/left.kicad_pcb
-          pcb_output_file: output/pcbs/left_routed.kicad_pcb
-          ses_file: output/pcbs/left.ses
-      - name: Import SES into Right PCB
-        uses: ./.github/actions/import-ses
-        with:
-          pcb_input_file: output/pcbs/right.kicad_pcb
-          pcb_output_file: output/pcbs/right_routed.kicad_pcb
-          ses_file: output/pcbs/right.ses
-      - name: Left board DRC check
+          boards: left right
+      - name: DRC check
         uses: ./.github/actions/run-drc
         with:
-          pcb_input_file: output/pcbs/left_routed.kicad_pcb
-          drc_output: output/pcbs/left-drc/
-      - name: Right board DRC check
-        uses: ./.github/actions/run-drc
-        with:
-          pcb_input_file: output/pcbs/right_routed.kicad_pcb
-          drc_output: output/pcbs/right-drc/
-#  gerbers:
-#    name: Generate Gerbers
-#    runs-on: ubuntu-latest
-#    steps:
-      - name: Export Gerbers for Left PCB
+          boards: left right
+      - name: Export Gerbers
         uses: ./.github/actions/export-gerbers
         with:
-          pcb_file: output/pcbs/left_routed.kicad_pcb
-          gerbers_dir: output/gerbers/left
-      - name: Export Gerbers for Right PCB
-        uses: ./.github/actions/export-gerbers
-        with:
-          pcb_file: output/pcbs/right_routed.kicad_pcb
-          gerbers_dir: output/gerbers/left
+          boards: left right
       - name: Persist output
         uses: actions/upload-artifact@v3
         with:

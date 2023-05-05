@@ -1,11 +1,8 @@
 name: 'Export Gerbers'
 description: 'Export Gerber files from a Kicad PCB'
 inputs:
-  pcb_file:
-    description: 'Kicad input file'
-    required: true
-  gerbers_dir:
-    description: 'Gerbers folder'
+  board:
+    description: 'Board name'
     required: true
   fab:
     description: 'Fabrication profile'
@@ -20,5 +17,9 @@ runs:
   args:
     - '-c'
     - |
-      mkdir -p $GITHUB_WORKSPACE/${{ inputs.gerbers_dir }} ;
-      kikit fab ${{ inputs.fab }} ${{ inputs.flags }} $GITHUB_WORKSPACE/${{ inputs.pcb_file }} $GITHUB_WORKSPACE/${{ inputs.gerbers_dir }}
+      for board in ${{ inputs.boards }};
+      do
+        echo Processing $board
+        mkdir -p $GITHUB_WORKSPACE/gerbers/${$board} ;
+        kikit fab ${{ inputs.fab }} ${{ inputs.flags }} $GITHUB_WORKSPACE/pcbs/${board}_routed.kicad_pcb $GITHUB_WORKSPACE/gerbers/${board}
+      done

@@ -1,10 +1,7 @@
 name: 'Autoroute'
 description: 'Autoroute a given DSN file to SES with FreeRouting'
 inputs:
-  dsn_file:
-    description: 'Specctra DSN input file'
-    required: true
-  ses_file:
+  boards:
     description: 'Specctra SES output file'
     required: true
 runs:
@@ -14,4 +11,8 @@ runs:
   args:
     - '-c'
     - |
-      java -jar /opt/freerouting_cli.jar -de ${{ inputs.dsn_file }} -do ${{ inputs.ses_file }}
+      for board in ${{ inputs.boards }};
+      do
+        echo Processing $board
+        java -jar /opt/freerouting_cli.jar -de output/pcbs/${board}.dsn -do output/pcbs/${board}.ses
+      done
