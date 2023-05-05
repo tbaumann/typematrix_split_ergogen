@@ -16,37 +16,48 @@ jobs:
         run: npm install
       - name: Generate unrouted PCBs
         run: npm run gen
-      - name: Export DSN for main PCB
+      - name: Export DSN for Left PCB
         uses: ./.github/actions/export-dsn
         with:
-          pcb_file: output/pcbs/board.kicad_pcb
-          dsn_file: output/pcbs/board.dsn
-      - name: Autoroute main PCB
+          pcb_file: output/pcbs/left.kicad_pcb
+          dsn_file: output/pcbs/left.dsn
+      - name: Export DSN for Right PCB
+        uses: ./.github/actions/export-dsn
+        with:
+          pcb_file: output/pcbs/right.kicad_pcb
+          dsn_file: output/pcbs/right.dsn
+      - name: Autoroute Left PCB
         uses: ./.github/actions/autoroute
         with:
-          dsn_file: output/pcbs/board.dsn
-          ses_file: output/pcbs/board.ses
-      - name: Import SES into main PCB
+          dsn_file: output/pcbs/left.dsn
+          ses_file: output/pcbs/left.ses
+      - name: Autoroute Right PCB
+        uses: ./.github/actions/autoroute
+        with:
+          dsn_file: output/pcbs/right.dsn
+          ses_file: output/pcbs/right.ses
+      - name: Import SES into Left PCB
         uses: ./.github/actions/import-ses
         with:
-          pcb_input_file: output/pcbs/board.kicad_pcb
-          pcb_output_file: output/pcbs/board_routed.kicad_pcb
+          pcb_input_file: output/pcbs/left.kicad_pcb
+          pcb_output_file: output/pcbs/left_routed.kicad_pcb
           ses_file: output/pcbs/board.ses
-      - name: Export Gerbers for top plate
+      - name: Import SES into Right PCB
+        uses: ./.github/actions/import-ses
+        with:
+          pcb_input_file: output/pcbs/right.kicad_pcb
+          pcb_output_file: output/pcbs/right_routed.kicad_pcb
+          ses_file: output/pcbs/board.ses
+      - name: Export Gerbers for Left PCB
         uses: ./.github/actions/export-gerbers
         with:
-          pcb_file: output/pcbs/top_plate.kicad_pcb
-          gerbers_dir: output/gerbers/top_plate
-      - name: Export Gerbers for bottom plate
+          pcb_file: output/pcbs/left_routed.kicad_pcb
+          gerbers_dir: output/gerbers/left
+      - name: Export Gerbers for Right PCB
         uses: ./.github/actions/export-gerbers
         with:
-          pcb_file: output/pcbs/bottom_plate.kicad_pcb
-          gerbers_dir: output/gerbers/bottom_plate
-      - name: Export Gerbers for main PCB
-        uses: ./.github/actions/export-gerbers
-        with:
-          pcb_file: output/pcbs/board.kicad_pcb
-          gerbers_dir: output/gerbers/board
+          pcb_file: output/pcbs/right_routed.kicad_pcb
+          gerbers_dir: output/gerbers/left
       - name: Persist output
         uses: actions/upload-artifact@v2
         with:
