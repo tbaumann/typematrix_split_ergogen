@@ -14,7 +14,6 @@ runs:
     - |
       mkdir -p $HOME/.config/kicad ;
       cp /root/.config/kicad/* $HOME/.config/kicad ;
-      gsettings set org.gnome.desktop.privacy remember-recent-files false
       for board in ${{ inputs.boards }};
       do
         echo Processing $board
