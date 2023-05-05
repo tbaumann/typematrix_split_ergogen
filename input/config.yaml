@@ -5,7 +5,7 @@ units:
   py: cy
   kxo: 0.5 * cx
   kyo: 0.5 * cy
-  
+
   # Font units
   font_x: 1
   font_y: 1
@@ -66,8 +66,8 @@ points:
         shift: [35, -100]
       key.tags: key
       columns:
-        left: 
-          key: 
+        left:
+          key:
             spread: cx * 0.25
             width: cx * 1.5
             asym: left
@@ -115,7 +115,7 @@ points:
         three:
           key.column_net: C2
       rows:
-        down:        
+        down:
           row_net: R7
         up:
           row_net: R6
@@ -134,11 +134,11 @@ points:
         three:
           key.column_net: C2
       rows:
-        down:        
+        down:
           row_net: R7
         up:
           row_net: R7
-      
+
     bigenters:
       key:
         spread: cx * 1.5
@@ -147,7 +147,7 @@ points:
         padding: 2cy
         height: 2cy
         tags: [key, enter]
-        
+
       anchor:
         ref: matrix_t_top
         shift: [cx * 1.25, -1.5cy]
@@ -168,7 +168,7 @@ points:
       key.tags: key
       anchor:
         ref: leftcluster_three_up
-        shift: [0.25 * cx  , 0]
+        shift: [0.25 * cx, 0]
       columns:
         alt:
           key:
@@ -179,7 +179,7 @@ points:
             width: 3.5cx
             spread: 2.25cx
             column_net: C4
-            tags: [key,space]
+            tags: [key, space]
       rows:
         space:
           row_net: R6
@@ -207,12 +207,12 @@ points:
     right:
       anchor:
         ref: rightsym_sym_bottom
-        shift: [-cx * 1.25 , -2cy]
+        shift: [-cx * 1.25, -2cy]
       key:
         asym: right
-        spread: cx * 1.5 
+        spread: cx * 1.5
         width: cx * 1.5
-        kx: cx * 1.5    
+        kx: cx * 1.5
         tags: key
       columns:
         sym:
@@ -265,9 +265,9 @@ outlines:
         - ref: spaces_space_space
           shift: [cx * 1.75, -cy * 0.5]
         - ref: leftcluster_three_down
-          shift: [cx * 0.75 , cy * 0.5]
+          shift: [cx * 0.75, cy * 0.5]
         - ref: leftcluster_three_down
-          shift: [cx * 0.75 , -cy * 0.5]
+          shift: [cx * 0.75, -cy * 0.5]
         - ref: leftcluster_one_down
           shift: [-cx * 0.75, -cy * 0.5]
 
@@ -283,12 +283,11 @@ outlines:
         - ref: mirror_spaces_space_space
           shift: [cx * 1.75, -cy * 0.5]
         - ref: mirror_rightcluster_three_down
-          shift: [cx * 0.75 , cy * 0.5]
+          shift: [cx * 0.75, cy * 0.5]
         - ref: mirror_rightcluster_three_down
-          shift: [cx * 0.75 , -cy * 0.5]
+          shift: [cx * 0.75, -cy * 0.5]
         - ref: mirror_rightcluster_one_down
           shift: [-cx * 2, -cy * 0.5]
-
 
   # Combination preview showing outline and keys.
   topleft:
@@ -300,33 +299,33 @@ outlines:
     - name: mirrorplateoutline
     - operation: subtract
       name: keys
-    
+
   mcuears:
     - what: rectangle
-      size: [mcu_x +10 , 6cy]
+      size: [mcu_x +10, 6cy]
       fillet: 2
 
   pcb_left:
     - name: plateoutline
     - operation: add
       name: mcuears
-      where: 
+      where:
         ref: bigenters_one_f
-        shift: [0.75 * cx + mcu_x/2 -5, -2.5cy ]
+        shift: [0.75 * cx + mcu_x/2 -5, -2.5cy]
 
   pcb_right:
     - name: mirrorplateoutline
     - operation: add
       name: mcuears
-      where: 
+      where:
         ref: mirror_bigenters_one_f
-        shift: [0.75 * cx + mcu_x/2 -5 , -2.5cy ]
+        shift: [0.75 * cx + mcu_x/2 -5, -2.5cy]
 
   toprightpcb:
     - name: pcb_right
     - operation: subtract
       name: keys
-    
+
   topleftpcb:
     - name: pcb_left
     - operation: subtract
@@ -350,7 +349,7 @@ pcbs:
     footprints:
       choc:
         what: chocmini
-        where: 
+        where:
           - /^matrix_.*/
           - /leftcluster_.*/
           - [/^bigenters_.*/, key, -enter]
@@ -362,7 +361,7 @@ pcbs:
           to: "{{column_net}}"
       choc_enter:
         what: chocmini
-        where: 
+        where:
           - [/^bigenters_.*/, enter]
         params:
           keycaps: true
@@ -373,7 +372,7 @@ pcbs:
           rotate: 90
       diode:
         what: diode
-        where: 
+        where:
           - /^matrix_.*/
           - /leftcluster_.*/
           - /^spaces_.*/
@@ -382,75 +381,75 @@ pcbs:
           from: "{{colrow}}"
           to: "{{row_net}}"
           tht: false # No through hole
-          side: B    # Bottom only
+          side: B # Bottom only
         adjust:
           shift: [-1.4, -6]
           rotate: 180
       diode_enters:
         what: diode
-        where: 
+        where:
           - [/^bigenters_.*/, enter]
         params:
           from: "{{colrow}}"
           to: "{{row_net}}"
           tht: false # No through hole
-          side: B    # Bottom only
+          side: B # Bottom only
         adjust:
           shift: [6, -1.4]
           rotate: 270
       backlight:
-        what: diode ## Fixme use LED 
-        where: 
+        what: diode ## Fixme use LED
+        where:
           - /^matrix_.*/
           - /leftcluster_.*/
           - [/^bigenters_.*/, key, -enter]
           - /^spaces_.*/
         params:
-          from:  "bl_{{colrow}}{{row_net}}"
-          to: GND 
+          from: "bl_{{colrow}}{{row_net}}"
+          to: GND
           tht: false # No through hole
-          side: F    # Top only
+          side: F # Top only
         adjust:
           shift: [0, 4.3]
           rotate: 0
       backlight_enters:
-        what: diode ## Fixme use LED 
-        where: 
+        what: diode ## Fixme use LED
+        where:
           - [/^bigenters_.*/, enter]
         params:
-          from:  "bl_{{colrow}}{{row_net}}"
-          to: GND 
+          from: "bl_{{colrow}}{{row_net}}"
+          to: GND
           tht: false # No through hole
-          side: F    # Top only
+          side: F # Top only
         adjust:
-          shift: [-4.3,0]
+          shift: [-4.3, 0]
           rotate: 90
       resistor_backlight:
-        what: diode ## Fixme use resistor 
-        where: 
+        what: diode ## Fixme use resistor
+        where:
           - /^matrix_.*/
           - /leftcluster_.*/
           - [/^bigenters_.*/, key, -enter]
           - /^spaces_.*/
         params:
-          from:  "bl_{{colrow}}{{row_net}}"
-          to: bl_pwr 
+          from: "bl_{{colrow}}{{row_net}}"
+          to: bl_pwr
           tht: false # No through hole
-          side: B    # Bottom only
+          side: B # Bottom only
         adjust:
           shift: [0, 4.3]
           rotate: 0
       resistor_backlight_enters:
-        what: diode ## Fixme use resistor 
-        where: 
+        what: diode ## Fixme use resistor
+        where:
           - [/^bigenters_.*/, enter]
         params:
-          from:  "bl_{{colrow}}{{row_net}}"
-          to: GND 
+          from: "bl_{{colrow}}{{row_net}}"
+          to: GND
           tht: false # No through hole
-          side: B    # Bottom only
+          side: B # Bottom only
         adjust:
-          shift: [-4.3,0]
+          shift: [-4.3, 0]
           rotate: 90
       # Controller Area
       promicro:
@@ -458,36 +457,36 @@ pcbs:
         params:
           # Pin Assignments (Controller on top facing down)
           # Right Side
-          P0: 'DPD'   # Display Data
-          P1: 'DPC'   # Display Clock
+          P0: "DPD" # Display Data
+          P1: "DPC" # Display Clock
           # GND
           # GND
-          P2: 'DPE'   # Display CS (nice!view only) FIXME? ZPM default?
-          P3: 'R1'    # Row
-          P4: 'R2'    # Row
-          P5: 'R3'    # Row
-          P6: 'R4'    # Row
-          P7: 'R5'    # Row
-          P8: 'R6'    # Row
-          P9: 'R7'    # Row
+          P2: "DPE" # Display CS (nice!view only) FIXME? ZPM default?
+          P3: "R1" # Row
+          P4: "R2" # Row
+          P5: "R3" # Row
+          P6: "R4" # Row
+          P7: "R5" # Row
+          P8: "R6" # Row
+          P9: "R7" # Row
 
           # Left Side
-          RAW: 'BAT_P'       # Battery Pos
+          RAW: "BAT_P" # Battery Pos
           # GND       # Ground / Battery Neg
           # RST       # Reset pin
           # VCC       # External Power
-          P21: 'C0'   # Column
-          P20: 'C1'   # Column
-          P19: 'C2'   # Column
-          P18: 'C3'   # Column
-          P15: 'C4'   # Column
-          P14: 'C5'   # Column
-          P16: 'C6'   # Column
-          P10: 'F10'  # Free
+          P21: "C0" # Column
+          P20: "C1" # Column
+          P19: "C2" # Column
+          P18: "C3" # Column
+          P15: "C4" # Column
+          P14: "C5" # Column
+          P16: "C6" # Column
+          P10: "F10" # Free
 
         where:
           ref: mcu
-          shift: [0,0]
+          shift: [0, 0]
           rotate: -90
       display:
         what: nice_view
@@ -526,8 +525,8 @@ pcbs:
     footprints:
       choc:
         what: chocmini
-        where: 
-          - [/^mirror.*/, key, -enter ]
+        where:
+          - [/^mirror.*/, key, -enter]
           - /rightcluster_.*/
         params:
           keycaps: true
@@ -536,7 +535,7 @@ pcbs:
           to: "{{column_net}}"
       choc_enter:
         what: chocmini
-        where: 
+        where:
           - [/^mirror.*/, key, enter]
         params:
           keycaps: true
@@ -547,78 +546,78 @@ pcbs:
           rotate: 270
       diode:
         what: diode
-        where: 
-          - [/^mirror.*/, key, -enter ]
+        where:
+          - [/^mirror.*/, key, -enter]
           - /rightcluster_.*/
         params:
           from: "{{colrow}}"
           to: "{{row_net}}"
           tht: false # No through hole
-          side: B    # Bottom only
+          side: B # Bottom only
         adjust:
           shift: [1.4, -6]
           rotate: 180
       diode_enters:
         what: diode
-        where: 
+        where:
           - [/^mirror.*/, key, enter]
         params:
           from: "{{colrow}}"
           to: "{{row_net}}"
           tht: false # No through hole
-          side: B    # Bottom only
+          side: B # Bottom only
         adjust:
           shift: [-6, -1.4]
           rotate: 90
       backlight:
-        what: diode ## Fixme use LED 
-        where: 
-          - [/^mirror.*/, key, -enter ]
+        what: diode ## Fixme use LED
+        where:
+          - [/^mirror.*/, key, -enter]
           - /rightcluster_.*/
         params:
-          from:  "bl_{{colrow}}{{row_net}}"
-          to: GND 
+          from: "bl_{{colrow}}{{row_net}}"
+          to: GND
           tht: false # No through hole
-          side: F    # Top only
+          side: F # Top only
         adjust:
           shift: [0, 4.3]
           rotate: 0
       backlight_enters:
-        what: diode ## Fixme use LED 
-        where: 
+        what: diode ## Fixme use LED
+        where:
           - [/^mirror.*/, key, enter]
         params:
-          from:  "bl_{{colrow}}{{row_net}}"
-          to: GND 
+          from: "bl_{{colrow}}{{row_net}}"
+          to: GND
           tht: false # No through hole
-          side: F    # Top only
+          side: F # Top only
         adjust:
-          shift: [4.3,0]
+          shift: [4.3, 0]
           rotate: 270
       resistor_backlight:
-        what: diode ## Fixme use Resistor 
-        where: 
-          - [/^mirror.*/, key, -enter ]
+        what: diode ## Fixme use Resistor
+        where:
+          - [/^mirror.*/, key, -enter]
           - /rightcluster_.*/
         params:
-          from:  "bl_{{colrow}}{{row_net}}"
-          to: bl_pwr 
+          from: "bl_{{colrow}}{{row_net}}"
+          to: bl_pwr
           tht: false # No through hole
-          side: B    # Bottom only
+          side: B # Bottom only
         adjust:
           shift: [0, 4.3]
           rotate: 0
       resistor_backlight_enters:
-        what: diode ## Fixme use resistor 
-        where: 
+        what: diode ## Fixme use resistor
+        where:
           - [/^mirror.*/, key, enter]
         params:
-          from:  "bl_{{colrow}}{{row_net}}"
-          to: bl_pwr 
+          from: "bl_{{colrow}}{{row_net}}"
+          to: bl_pwr
           tht: false # No through hole
-          side: B    # Bottom only
+          side: B # Bottom only
         adjust:
-          shift: [4.3,0]
+          shift: [4.3, 0]
           rotate: 270
       # Controller Area
       promicro:
@@ -626,36 +625,36 @@ pcbs:
         params:
           # Pin Assignments (Controller on top facing down)
           # Right Side
-          P0: 'DPD'   # Display Data
-          P1: 'DPC'   # Display Clock
+          P0: "DPD" # Display Data
+          P1: "DPC" # Display Clock
           # GND
           # GND
-          P2: 'DPE'   # Display CS (nice!view only) FIXME? ZPM default?
-          P3: 'R1'    # Row
-          P4: 'R2'    # Row 
-          P5: 'R3'    # Row 
-          P6: 'R4'    # Row 
-          P7: 'R5'    # Row 
-          P8: 'R6'    # Row
-          P9: 'R7'    # Row
+          P2: "DPE" # Display CS (nice!view only) FIXME? ZPM default?
+          P3: "R1" # Row
+          P4: "R2" # Row
+          P5: "R3" # Row
+          P6: "R4" # Row
+          P7: "R5" # Row
+          P8: "R6" # Row
+          P9: "R7" # Row
 
           # Left Side
-          RAW: 'BAT_P'       # Battery Pos
+          RAW: "BAT_P" # Battery Pos
           # GND       # Ground / Battery Neg
           # RST       # Reset pin
           # VCC       # External Power
-          P21: 'C0'   # Column 
-          P20: 'C1'   # Column 
-          P19: 'C2'   # Column 
-          P18: 'C3'   # Column 
-          P15: 'C4'   # Column 
-          P14: 'C5'   # Column 
-          P16: 'C6'   # Column
-          P10: 'C7'   # Column
+          P21: "C0" # Column
+          P20: "C1" # Column
+          P19: "C2" # Column
+          P18: "C3" # Column
+          P15: "C4" # Column
+          P14: "C5" # Column
+          P16: "C6" # Column
+          P10: "C7" # Column
 
         where:
           ref: mirror_mcu
-          shift: [0,0]
+          shift: [0, 0]
           rotate: 90
 
       display:
