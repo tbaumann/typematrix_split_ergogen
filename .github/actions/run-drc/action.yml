@@ -17,4 +17,6 @@ runs:
     - |
       mkdir -p $HOME/.config/kicad ;
       cp /root/.config/kicad/* $HOME/.config/kicad ;
-      /usr/lib/python2.7/dist-packages/kicad-automation/pcbnew_automation/run_drc.py $GITHUB_WORKSPACE/${{ inputs.pcb_input_file }} $GITHUB_WORKSPACE/${{ inputs.drc_file }} 
+      /usr/lib/python2.7/dist-packages/kicad-automation/pcbnew_automation/run_drc.py $GITHUB_WORKSPACE/${{ inputs.pcb_input_file }} $GITHUB_WORKSPACE/${{ inputs.drc_output }} 
+      cat $GITHUB_WORKSPACE/${{ inputs.drc_output }}/drc_result.rpt >> "$GITHUB_STEP_SUMMARY"  
+      cat $GITHUB_WORKSPACE/${{ inputs.drc_output }}/drc_result.rpt >> "$GITHUB_OUTPUT"
