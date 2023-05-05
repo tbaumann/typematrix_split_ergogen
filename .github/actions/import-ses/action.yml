@@ -20,6 +20,5 @@ runs:
     - |
       mkdir -p $HOME/.config/kicad ;
       cp /root/.config/kicad/* $HOME/.config/kicad ;
-      gsettings set org.gnome.desktop.privacy remember-recent-files false
-      /usr/lib/python2.7/dist-packages/kicad-automation/pcbnew_automation/import_ses.py $GITHUB_WORKSPACE/${{ inputs.pcb_input_file }} $GITHUB_WORKSPACE/${{ inputs.ses_file }} ;
-      ls -lh $GITHUB_WORKSPACE/${{ inputs.pcb_input_file }} $GITHUB_WORKSPACE/${{ inputs.ses_file }}
+      /usr/lib/python2.7/dist-packages/kicad-automation/pcbnew_automation/import_ses.py $GITHUB_WORKSPACE/${{ inputs.pcb_input_file }} $GITHUB_WORKSPACE/${{ inputs.ses_file }} --output-file $GITHUB_WORKSPACE/${{ inputs.pcb_output_file }};
+      #ls -lh $GITHUB_WORKSPACE/${{ inputs.pcb_input_file }} $GITHUB_WORKSPACE/${{ inputs.ses_file }}
