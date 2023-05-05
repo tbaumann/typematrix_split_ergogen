@@ -1,7 +1,7 @@
 name: 'Import SES to Kicad'
 description: 'Import Specctra SES into a Kicad PCB'
 inputs:
-  board:
+  boards:
     description: 'Board name'
     required: true
 runs:
