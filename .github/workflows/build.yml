@@ -7,9 +7,9 @@ jobs:
     name: Generate
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Use Node.js 17
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 17.x
       - name: Install dependencies
@@ -70,7 +70,7 @@ jobs:
           pcb_file: output/pcbs/right_routed.kicad_pcb
           gerbers_dir: output/gerbers/left
       - name: Persist output
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-          name: samoklava-routed-pcbs-and-gerbers
+          name: routed-pcbs-and-gerbers
           path: output
