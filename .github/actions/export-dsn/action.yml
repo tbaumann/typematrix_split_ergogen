@@ -17,9 +17,5 @@ runs:
       for board in ${{ inputs.boards }};
       do
         echo Processing $board
-
-        ls -l $GITHUB_WORKSPACE/output/pcbs/${board}.kicad_pcb $GITHUB_WORKSPACE/output/pcbs/${board}.dsn
-        find $GITHUB_WORKSPACE/
-        echo /usr/lib/python2.7/dist-packages/kicad-automation/pcbnew_automation/export_dsn.py $GITHUB_WORKSPACE/output/pcbs/${board}.kicad_pcb $GITHUB_WORKSPACE/output/pcbs/${board}.dsn
         /usr/lib/python2.7/dist-packages/kicad-automation/pcbnew_automation/export_dsn.py $GITHUB_WORKSPACE/output/pcbs/${board}.kicad_pcb $GITHUB_WORKSPACE/output/pcbs/${board}.dsn
       done

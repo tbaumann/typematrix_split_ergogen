@@ -16,9 +16,9 @@ runs:
       cp /root/.config/kicad/* $HOME/.config/kicad ;
       for board in ${{ inputs.boards }};
       do
-        /usr/lib/python2.7/dist-packages/kicad-automation/pcbnew_automation/run_drc.py $GITHUB_WORKSPACE/pcbs/${{ $board }}_routed.kicad_pcb $GITHUB_WORKSPACE/pcbs/${{ board }}-drc/
+        /usr/lib/python2.7/dist-packages/kicad-automation/pcbnew_automation/run_drc.py $GITHUB_WORKSPACE/output/pcbs/${{ $board }}_routed.kicad_pcb $GITHUB_WORKSPACE/output/pcbs/${{ board }}-drc/
         echo "## DRC result $board" >> "$GITHUB_STEP_SUMMARY"
         echo '```' >> "$GITHUB_STEP_SUMMARY"
-        cat $GITHUB_WORKSPACE/pcbs/${{ board }}-drc/drc_result.rpt >> "$GITHUB_STEP_SUMMARY"
+        cat $GITHUB_WORKSPACE/output/pcbs/${{ board }}-drc/drc_result.rpt >> "$GITHUB_STEP_SUMMARY"
         echo '```' >> "$GITHUB_STEP_SUMMARY"
       done
