@@ -17,5 +17,8 @@ runs:
       for board in ${{ inputs.boards }};
       do
         echo Processing $board
+
+        ls -l pcbs/${board}.kicad_pcb pcbs/$ {board}.dsn
+        echo /usr/lib/python2.7/dist-packages/kicad-automation/pcbnew_automation/export_dsn.py pcbs/${board}.kicad_pcb pcbs/${board}.dsn
         /usr/lib/python2.7/dist-packages/kicad-automation/pcbnew_automation/export_dsn.py pcbs/${board}.kicad_pcb pcbs/${board}.dsn
       done
