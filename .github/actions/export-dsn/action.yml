@@ -1,8 +1,8 @@
 name: 'Export DSN'
 description: 'Export Specctra DSN from a Kicad PCB'
 inputs:
-  board:
-    description: 'Board name'
+  boards:
+    description: 'Board names'
     required: true
 runs:
   using: 'docker'
@@ -18,7 +18,8 @@ runs:
       do
         echo Processing $board
 
-        ls -l pcbs/${board}.kicad_pcb pcbs/$ {board}.dsn
-        echo /usr/lib/python2.7/dist-packages/kicad-automation/pcbnew_automation/export_dsn.py pcbs/${board}.kicad_pcb pcbs/${board}.dsn
-        /usr/lib/python2.7/dist-packages/kicad-automation/pcbnew_automation/export_dsn.py pcbs/${board}.kicad_pcb pcbs/${board}.dsn
+        ls -l $GITHUB_WORKSPACE/output/pcbs/${board}.kicad_pcb $GITHUB_WORKSPACE/output/pcbs/${board}.dsn
+        find $GITHUB_WORKSPACE/
+        echo /usr/lib/python2.7/dist-packages/kicad-automation/pcbnew_automation/export_dsn.py $GITHUB_WORKSPACE/output/pcbs/${board}.kicad_pcb $GITHUB_WORKSPACE/output/pcbs/${board}.dsn
+        /usr/lib/python2.7/dist-packages/kicad-automation/pcbnew_automation/export_dsn.py $GITHUB_WORKSPACE/output/pcbs/${board}.kicad_pcb $GITHUB_WORKSPACE/output/pcbs/${board}.dsn
       done
