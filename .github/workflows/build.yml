@@ -41,13 +41,13 @@ jobs:
         with:
           pcb_input_file: output/pcbs/left.kicad_pcb
           pcb_output_file: output/pcbs/left_routed.kicad_pcb
-          ses_file: output/pcbs/board.ses
+          ses_file: output/pcbs/left.ses
       - name: Import SES into Right PCB
         uses: ./.github/actions/import-ses
         with:
           pcb_input_file: output/pcbs/right.kicad_pcb
           pcb_output_file: output/pcbs/right_routed.kicad_pcb
-          ses_file: output/pcbs/board.ses
+          ses_file: output/pcbs/right.ses
       - name: Export Gerbers for Left PCB
         uses: ./.github/actions/export-gerbers
         with:
