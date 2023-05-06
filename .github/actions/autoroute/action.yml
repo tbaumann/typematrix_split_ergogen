@@ -6,7 +6,7 @@ inputs:
     required: true
 runs:
   using: 'docker'
-  image: 'docker://soundmonster/freerouting_cli:v0.1.0'
+  image: 'docker://soundmonster/freerouting_cli:latest:latest'
   entrypoint: '/bin/sh'
   args:
     - '-c'
