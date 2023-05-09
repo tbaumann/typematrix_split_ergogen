@@ -6,6 +6,17 @@ units:
   kxo: 0.5 * kx
   kyo: 0.5 * ky
 
+  # PG1232 plate cutout
+  plate_kx: 13.6
+  plate_ky: 12.6
+
+  # Stabilizer dimensions
+  stabilizer_width: 7
+  stabilizer_height: 14
+  stabilizer_offset: -1 # This means south stabs, use `orient` to rotate them for north facing scenarios
+  stabilizer_spacing_2u: u / 2 + stabilizer_width / 2 + ((23.8 / 2) - (14 / 2) - (stabilizer_width / 2)) # The complex formula has two magic numbers. 14 is the size of a switch cutout for a plate. 23.8 is the distance between each stabilizer on a 2-2.75u stabilizer, as specified by Cherry
+  stabilizer_spacing_3u: u * ((3 - 1) / 2)
+
   # Font units
   font_x: 1
   font_y: 1
@@ -146,7 +157,7 @@ points:
         kx: kx * 1.5
         padding: 2ky
         height: 2ky
-        tags: [key, enter]
+        tags: [key, enter, 2u_stabilizer_90]
 
       anchor:
         ref: matrix_t_top
@@ -179,7 +190,7 @@ points:
             width: 3.5kx
             spread: 2.25kx
             column_net: C4
-            tags: [key, space]
+            tags: [key, space, 3u_stabilizer]
       rows:
         space:
           row_net: R6
@@ -248,12 +259,62 @@ points:
     ref: bigenters_one_f
     distance: 100
 outlines:
-  keys:
-    - what: rectangle
-      where: [key]
-      size: [kx - 3, ky - 5] # FIXME hole sizes
+  _2u_stabilizer: # This creates the stabilizer, you just need to use its name in a `where` clause of another outline
+    - operation: stack
+      where: [2u_stabilizer] # Set this tag on the keys you want
+      what: rectangle
+      size: [stabilizer_width, stabilizer_height]
+      adjust:
+        shift: [stabilizer_spacing_2u, stabilizer_offset]
+    - operation: stack
+      where: [2u_stabilizer]
+      what: rectangle
+      size: [stabilizer_width, stabilizer_height]
+      adjust:
+        shift: [-stabilizer_spacing_2u, stabilizer_offset]
+  
+  _2u_stabilizer_90: # This creates the stabilizer, you just need to use its name in a `where` clause of another outline
+    - operation: stack
+      where: [2u_stabilizer_90] # Set this tag on the keys you want
+      what: rectangle
+      size: [stabilizer_height, stabilizer_width]
+      adjust:
+        shift: [stabilizer_offset, stabilizer_spacing_2u]
+    - operation: stack
+      where: [2u_stabilizer_90]
+      what: rectangle
+      size: [stabilizer_height, stabilizer_width]
+      adjust:
+        shift: [stabilizer_offset, -stabilizer_spacing_2u]
 
-  plateoutline:
+  _3u_stabilizer: # This creates the stabilizer, you just need to use its name in a `where` clause of another outline
+    - operation: stack
+      where: [3u_stabilizer] # Set this tag on the keys you want
+      what: rectangle
+      size: [stabilizer_width, stabilizer_height]
+      adjust:
+        shift: [stabilizer_spacing_3u, stabilizer_offset]
+    - operation: stack
+      where: [3u_stabilizer]
+      what: rectangle
+      size: [stabilizer_width, stabilizer_height]
+      adjust:
+        shift: [-stabilizer_spacing_3u, stabilizer_offset]
+
+  _keys:
+    - what: rectangle
+      where: [[key, -enter, -space]]
+      size: [plate_kx/2, plate_ky/2]
+  _enters:
+    - what: rectangle
+      where: [[key, enter]]
+      size: [plate_ky/2, plate_kx/2]
+  _spaces:
+    - what: rectangle
+      where: [[key, space]]
+      size: [plate_kx/2, plate_ky/2]
+
+  _outline_left:
     - what: polygon
       operation: stack
       fillet: 2
@@ -271,7 +332,7 @@ outlines:
         - ref: leftcluster_one_down
           shift: [-kx * 0.75, -ky * 0.5]
 
-  mirrorplateoutline:
+  _outline_right:
     - what: polygon
       operation: stack
       fillet: 2
@@ -288,58 +349,71 @@ outlines:
           shift: [kx * 0.75, -ky * 0.5]
         - ref: mirror_rightcluster_one_down
           shift: [-kx * 2, -ky * 0.5]
-
-  # Combination preview showing outline and keys.
-  topleft:
-    - name: plateoutline
-    - operation: subtract
-      name: keys
-
-  topright:
-    - name: mirrorplateoutline
-    - operation: subtract
-      name: keys
-
-  mcuears:
+  
+  _mcuears:
     - what: rectangle
       size: [mcu_x +10, 6ky]
       fillet: 2
 
   pcb_left:
-    - name: plateoutline
+    - name: _outline_left
     - operation: add
-      name: mcuears
+      name: _mcuears
       where:
         ref: bigenters_one_f
         shift: [0.75 * kx + mcu_x/2 -5, -2.5ky]
 
   pcb_right:
-    - name: mirrorplateoutline
+    - name: _outline_right
     - operation: add
-      name: mcuears
+      name: _mcuears
       where:
         ref: mirror_bigenters_one_f
         shift: [0.75 * kx + mcu_x/2 -5, -2.5ky]
 
-  toprightpcb:
+  topleft:
+    - name: _outline_left
+    - operation: subtract
+      name: _keys
+    - operation: subtract
+      name: _enters
+    - operation: subtract
+      name: _spaces
+    - operation: subtract
+      name: _2u_stabilizer
+    - operation: subtract
+      name: _2u_stabilizer_90
+    - operation: subtract
+      name: _3u_stabilizer
+
+  topright:
+    - name: _outline_right
+    - operation: subtract
+      name: _keys
+    - operation: subtract
+      name: _enters
+    - operation: subtract
+      name: _spaces
+    - operation: subtract
+      name: _2u_stabilizer
+    - operation: subtract
+      name: _2u_stabilizer_90
+    - operation: subtract
+      name: _3u_stabilizer
+
+
+  bottomright:
     - name: pcb_right
-    - operation: subtract
-      name: keys
 
-  topleftpcb:
+  bottomleft:
     - name: pcb_left
-    - operation: subtract
-      name: keys
 
-  all:
-    - name: topleftpcb
+  # Combination preview showing outline and keys.
+  combined:
+    - name: topleft
     - operation: stack
-      name: toprightpcb
+      name: topright
 
-  pcb_both:
-    - name: pcb_left
-    - operation: stack
-      name: pcb_right
 
 pcbs:
   left:
