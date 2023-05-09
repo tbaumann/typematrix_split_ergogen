@@ -12,7 +12,7 @@ inputs:
     default: '--no-assembly'
 runs:
   using: 'docker'
-  image: 'docker://yaqwsx/kikit:latest'
+  image: 'docker://yaqwsx/kikit:v0.7'
   entrypoint: '/bin/sh'
   args:
     - '-c'
