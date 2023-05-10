@@ -37,7 +37,7 @@ The interesting thing about this keyboard is that it's a declarative design:
 * Better nice!nano footprint, steal from https://github.com/bstiq/nice-nano-kicad
 * Middle bracked PCB with touchpad (Holds both halves together rigidly)
 * Align board edges with actual keycap size
-* stabilizer cutouts
+* stabilizer cutouts (Kailh says stabilizers are not supported for PG1232! :worried:) Needs more research...
 
 ## How to
 
