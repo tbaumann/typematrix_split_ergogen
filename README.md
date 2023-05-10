@@ -38,6 +38,7 @@ The interesting thing about this keyboard is that it's a declarative design:
 * Middle bracked PCB with touchpad (Holds both halves together rigidly)
 * Align board edges with actual keycap size
 * stabilizer cutouts (Kailh says stabilizers are not supported for PG1232! :worried:) Needs more research...
+  Thanks https://github.com/jasonhazel for measuring the ChocFox WOB 3u spacebar stabilizer spacing. (40mm)
 
 ## How to
 
