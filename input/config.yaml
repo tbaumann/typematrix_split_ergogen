@@ -1,21 +1,18 @@
 units:
-  kx: cx
-  ky: cy
+  kx: 17 
+  ky: 17
   px: kx
   py: ky
   kxo: 0.5 * kx
   kyo: 0.5 * ky
 
-  # PG1232 plate cutout
+  cfx_x_1u: 16.5
+  cfx_x_1_5u: 26
+  cfx_x_1_5u_span: 13.25 + kx/2
+  cfx_x_space:  54.5
+  # PG1232 plate cutout FIXME regular chic
   plate_kx: 13.6
   plate_ky: 12.6
-
-  # Stabilizer dimensions
-  stabilizer_width: 7
-  stabilizer_height: 14
-  stabilizer_offset: -1 # This means south stabs, use `orient` to rotate them for north facing scenarios
-  stabilizer_spacing_2u: u / 2 + stabilizer_width / 2 + ((23.8 / 2) - (14 / 2) - (stabilizer_width / 2)) # The complex formula has two magic numbers. 14 is the size of a switch cutout for a plate. 23.8 is the distance between each stabilizer on a 2-2.75u stabilizer, as specified by Cherry
-  stabilizer_spacing_3u: u * ((3 - 1) / 2)
 
   # Font units
   font_x: 1
@@ -68,8 +65,8 @@ points:
   key:
     padding: ky
     spread: kx
-    width: kx
-    height: ky
+    width: cfx_x_1u
+    height: cfx_x_1u
   zones:
     matrix:
       # Fix placement on KiCAD sheet.
@@ -79,13 +76,14 @@ points:
       columns:
         left:
           key:
-            spread: kx * 0.25
-            width: kx * 1.5
+            spread: cfx_x_1_5u_span
+            width: cfx_x_1_5u
             asym: left
             column_net: C0
+            tags: [key, 1_5u]
         q:
           key:
-            spread: kx * 1.25
+            spread: cfx_x_1_5u_span
             column_net: C1
         w:
           key.column_net: C2
@@ -95,7 +93,12 @@ points:
           key.column_net: C4
         t:
           key.column_net: C5
-
+        enter:
+          key:
+            column_net: C6
+            spread: cfx_x_1_5u_span
+            width: cfx_x_1_5u
+            tags: [key, 1_5u]
       rows:
         bottom:
           row_net: R4
@@ -110,11 +113,10 @@ points:
 
     leftcluster:
       key:
-        spread: kx * 1.5
-        width: kx * 1.5
-        kx: kx * 1.5
+        spread: cfx_x_1_5u+0.5
+        width: cfx_x_1_5u
         asym: left
-        tags: key
+        tags: [key, 1_5u]
       anchor:
         ref: matrix_left_bottom
         shift: [0, -2ky]
@@ -122,21 +124,22 @@ points:
         one:
           key.column_net: C0
         two:
+          #key.width: 21.50
           key.column_net: C1
         three:
           key.column_net: C2
       rows:
         down:
-          row_net: R7
-        up:
           row_net: R6
+        up:
+          row_net: R5
     rightcluster:
       key:
         asym: right
         tags: key
       anchor:
-        ref: matrix_left_bottom
-        shift: [0.25 * kx, -2ky]
+        ref: matrix_q_bottom
+        shift: [-1 kx, -2ky]
       columns:
         one:
           key.column_net: C0
@@ -146,40 +149,16 @@ points:
           key.column_net: C2
       rows:
         down:
-          row_net: R7
+          row_net: R6
         up:
-          row_net: R7
+          row_net: R5
 
-    bigenters:
-      key:
-        spread: kx * 1.5
-        width: kx * 1.5
-        kx: kx * 1.5
-        padding: 2ky
-        height: 2ky
-        tags: [key, enter, 2u_stabilizer_90]
-
-      anchor:
-        ref: matrix_t_top
-        shift: [kx * 1.25, -1.5ky]
-      columns:
-        one:
-          key.column_net: C6
-      rows:
-        enter:
-          row_net: R2
-        back:
-          padding: ky * 1.5
-          row_net: R1
-        f:
-          height: ky
-          tags: key
-          row_net: R0
+        
     spaces:
       key.tags: key
       anchor:
-        ref: leftcluster_three_up
-        shift: [0.25 * kx, 0]
+        ref: matrix_q_bottom
+        shift: [2kx, -1ky]
       columns:
         alt:
           key:
@@ -187,13 +166,13 @@ points:
             column_net: C3
         space:
           key:
-            width: 3.5kx
-            spread: 2.25kx
+            width: cfx_x_space
+            spread: 41.5
             column_net: C4
-            tags: [key, space, 3u_stabilizer]
+            tags: [key, space]
       rows:
         space:
-          row_net: R6
+          row_net: R5
     rightsym:
       anchor:
         ref: matrix_q_bottom
@@ -204,6 +183,7 @@ points:
       columns:
         sym:
           key.column_net: C0
+       
       rows:
         bottom:
           row_net: R4
@@ -218,13 +198,12 @@ points:
     right:
       anchor:
         ref: rightsym_sym_bottom
-        shift: [-kx * 1.25, -2ky]
+        shift: [-cfx_x_1_5u_span, -2ky]
       key:
         asym: right
-        spread: kx * 1.5
-        width: kx * 1.5
-        kx: kx * 1.5
-        tags: key
+        spread: cfx_x_1_5u_span
+        width: cfx_x_1_5u
+        tags: [key, 1_5u]
       columns:
         sym:
           key.column_net: C7
@@ -248,62 +227,20 @@ points:
     #
     controller:
       anchor:
-        ref: bigenters_one_f
-        shift: [0.75 * kx + mcu_xo, kyo -2.25 - mcu_yo]
+        ref: matrix_enter_f
+        shift: [cfx_x_1_5u/2 + mcu_xo +1, kyo -2.25 - mcu_yo]
       key:
         name: mcu
         width: mcu_x
         height: mcu_y
 
   mirror: &mirror
-    ref: bigenters_one_f
+    ref: matrix_enter_f
     distance: 100
 outlines:
-  _2u_stabilizer: # This creates the stabilizer, you just need to use its name in a `where` clause of another outline
-    - operation: stack
-      where: [2u_stabilizer] # Set this tag on the keys you want
-      what: rectangle
-      size: [stabilizer_width, stabilizer_height]
-      adjust:
-        shift: [stabilizer_spacing_2u, stabilizer_offset]
-    - operation: stack
-      where: [2u_stabilizer]
-      what: rectangle
-      size: [stabilizer_width, stabilizer_height]
-      adjust:
-        shift: [-stabilizer_spacing_2u, stabilizer_offset]
-  
-  _2u_stabilizer_90: # This creates the stabilizer, you just need to use its name in a `where` clause of another outline
-    - operation: stack
-      where: [2u_stabilizer_90] # Set this tag on the keys you want
-      what: rectangle
-      size: [stabilizer_height, stabilizer_width]
-      adjust:
-        shift: [stabilizer_offset, stabilizer_spacing_2u]
-    - operation: stack
-      where: [2u_stabilizer_90]
-      what: rectangle
-      size: [stabilizer_height, stabilizer_width]
-      adjust:
-        shift: [stabilizer_offset, -stabilizer_spacing_2u]
-
-  _3u_stabilizer: # This creates the stabilizer, you just need to use its name in a `where` clause of another outline
-    - operation: stack
-      where: [3u_stabilizer] # Set this tag on the keys you want
-      what: rectangle
-      size: [stabilizer_width, stabilizer_height]
-      adjust:
-        shift: [stabilizer_spacing_3u, stabilizer_offset]
-    - operation: stack
-      where: [3u_stabilizer]
-      what: rectangle
-      size: [stabilizer_width, stabilizer_height]
-      adjust:
-        shift: [-stabilizer_spacing_3u, stabilizer_offset]
-
   _keys:
     - what: rectangle
-      where: [[key, -enter, -space]]
+      where: [[key, -space]]
       size: [plate_kx/2, plate_ky/2]
   _enters:
     - what: rectangle
@@ -320,35 +257,35 @@ outlines:
       fillet: 2
       points:
         - ref: matrix_left_f
-          shift: [-kx * 0.75, ky * 0.5]
-        - ref: bigenters_one_f
-          shift: [kx * 0.75, ky * 0.5]
-        - ref: spaces_space_space
-          shift: [kx * 1.75, -ky * 0.5]
+          shift: [-cfx_x_1_5u/2 - 0.25, ky * 0.5]
+        - ref: matrix_enter_f
+          shift: [cfx_x_1_5u/2 + 0.25, ky * 0.5]
+        - ref: matrix_enter_bottom
+          shift: [cfx_x_1_5u/2 + 0.25, -ky * 1.5]
         - ref: leftcluster_three_down
-          shift: [kx * 0.75, ky * 0.5]
+          shift: [cfx_x_1_5u/2 + 0.25, ky * 0.5]
         - ref: leftcluster_three_down
-          shift: [kx * 0.75, -ky * 0.5]
+          shift: [cfx_x_1_5u/2 + 0.25, -ky * 0.5]
         - ref: leftcluster_one_down
-          shift: [-kx * 0.75, -ky * 0.5]
+          shift: [-cfx_x_1_5u/2 - 0.25, -ky * 0.5]
 
   _outline_right:
     - what: polygon
       operation: stack
       fillet: 2
       points:
-        - ref: mirror_rightsym_sym_f
-          shift: [-kx * 2, ky * 0.5]
-        - ref: mirror_bigenters_one_f
-          shift: [kx * 0.75, ky * 0.5]
-        - ref: mirror_spaces_space_space
-          shift: [kx * 1.75, -ky * 0.5]
+        - ref: mirror_right_sym_f
+          shift: [-cfx_x_1_5u/2 - 0.25, ky * 0.5]
+        - ref: mirror_matrix_enter_f
+          shift: [cfx_x_1_5u/2 + 0.25, ky * 0.5]
+        - ref: mirror_matrix_enter_bottom
+          shift: [cfx_x_1_5u/2 + 0.25, -ky * 1.5]
         - ref: mirror_rightcluster_three_down
-          shift: [kx * 0.75, ky * 0.5]
+          shift: [kx/2, ky * 0.5]
         - ref: mirror_rightcluster_three_down
-          shift: [kx * 0.75, -ky * 0.5]
-        - ref: mirror_rightcluster_one_down
-          shift: [-kx * 2, -ky * 0.5]
+          shift: [kx/2, -ky * 0.5]
+        - ref: mirror_right_sym_ctl_down
+          shift: [-cfx_x_1_5u/2 - 0.25, -ky * 0.5]
   
   _mcuears:
     - what: rectangle
@@ -360,7 +297,7 @@ outlines:
     - operation: add
       name: _mcuears
       where:
-        ref: bigenters_one_f
+        ref: matrix_enter_f
         shift: [0.75 * kx + mcu_x/2 -5, -2.5ky]
 
   pcb_right:
@@ -368,7 +305,7 @@ outlines:
     - operation: add
       name: _mcuears
       where:
-        ref: mirror_bigenters_one_f
+        ref: mirror_matrix_enter_f
         shift: [0.75 * kx + mcu_x/2 -5, -2.5ky]
 
   topleft:
@@ -376,30 +313,16 @@ outlines:
     - operation: subtract
       name: _keys
     - operation: subtract
-      name: _enters
-    - operation: subtract
       name: _spaces
-    - operation: subtract
-      name: _2u_stabilizer
-    - operation: subtract
-      name: _2u_stabilizer_90
-    - operation: subtract
-      name: _3u_stabilizer
+
 
   topright:
     - name: _outline_right
     - operation: subtract
       name: _keys
     - operation: subtract
-      name: _enters
-    - operation: subtract
       name: _spaces
-    - operation: subtract
-      name: _2u_stabilizer
-    - operation: subtract
-      name: _2u_stabilizer_90
-    - operation: subtract
-      name: _3u_stabilizer
+
 
 
   bottomright:
@@ -422,35 +345,51 @@ pcbs:
         outline: pcb_left
     footprints:
       choc:
-        what: chocmini
+        what: choc
         where:
-          - /^matrix_.*/
+          - [/^matrix_.*/, key, -1_5u]
+          - [/^spaces_.*/, key, -space]
+        params:
+          keycaps: true
+          reverse: false
+          hotswap: true
+          keycaps_x: 16.5
+          keycaps_y: 16.5
+          from: "{{colrow}}"
+          to: "{{column_net}}"
+      choc_1_5u:
+        what: choc
+        where:
+          - [/^matrix_.*/, 1_5u]
           - /leftcluster_.*/
-          - [/^bigenters_.*/, key, -enter]
-          - /^spaces_.*/
         params:
           keycaps: true
           reverse: false
+          hotswap: true
           from: "{{colrow}}"
           to: "{{column_net}}"
-      choc_enter:
-        what: chocmini
-        where:
-          - [/^bigenters_.*/, enter]
+          keycaps_x: cfx_x_1_5u
+          keycaps_y: 16.5
+      choc_space:
+        what: choc
+        where: 
+          - [/^spaces_.*/, key, -1_5u, space]
+
         params:
           keycaps: true
           reverse: false
+          hotswap: true
+          keycaps_x: cfx_x_space
+
+          keycaps_y: 16.5
           from: "{{colrow}}"
           to: "{{column_net}}"
-        adjust:
-          rotate: 90
       diode:
         what: diode
         where:
           - /^matrix_.*/
           - /leftcluster_.*/
           - /^spaces_.*/
-          - [/^bigenters_.*/, key, -enter]
         params:
           from: "{{colrow}}"
           to: "{{row_net}}"
@@ -459,72 +398,6 @@ pcbs:
         adjust:
           shift: [-1.4, -6]
           rotate: 180
-      diode_enters:
-        what: diode
-        where:
-          - [/^bigenters_.*/, enter]
-        params:
-          from: "{{colrow}}"
-          to: "{{row_net}}"
-          tht: false # No through hole
-          side: B # Bottom only
-        adjust:
-          shift: [6, -1.4]
-          rotate: 270
-      backlight:
-        what: diode ## Fixme use LED
-        where:
-          - /^matrix_.*/
-          - /leftcluster_.*/
-          - [/^bigenters_.*/, key, -enter]
-          - /^spaces_.*/
-        params:
-          from: "bl_{{colrow}}{{row_net}}"
-          to: GND
-          tht: false # No through hole
-          side: F # Top only
-        adjust:
-          shift: [0, 4.3]
-          rotate: 0
-      backlight_enters:
-        what: diode ## Fixme use LED
-        where:
-          - [/^bigenters_.*/, enter]
-        params:
-          from: "bl_{{colrow}}{{row_net}}"
-          to: GND
-          tht: false # No through hole
-          side: F # Top only
-        adjust:
-          shift: [-4.3, 0]
-          rotate: 90
-      resistor_backlight:
-        what: diode ## Fixme use resistor
-        where:
-          - /^matrix_.*/
-          - /leftcluster_.*/
-          - [/^bigenters_.*/, key, -enter]
-          - /^spaces_.*/
-        params:
-          from: "bl_{{colrow}}{{row_net}}"
-          to: bl_pwr
-          tht: false # No through hole
-          side: B # Bottom only
-        adjust:
-          shift: [0, 4.3]
-          rotate: 0
-      resistor_backlight_enters:
-        what: diode ## Fixme use resistor
-        where:
-          - [/^bigenters_.*/, enter]
-        params:
-          from: "bl_{{colrow}}{{row_net}}"
-          to: GND
-          tht: false # No through hole
-          side: B # Bottom only
-        adjust:
-          shift: [-4.3, 0]
-          rotate: 90
       # Controller Area
       promicro:
         what: promicro
@@ -598,30 +471,49 @@ pcbs:
         outline: pcb_right
     footprints:
       choc:
-        what: chocmini
+        what: choc
         where:
-          - [/^mirror.*/, key, -enter]
+          - [/^mirror.*/, key, -1_5u, -space]
           - /rightcluster_.*/
+        
         params:
           keycaps: true
           reverse: false
+          hotswap: true
+          keycaps_x: 16.5
+          keycaps_y: 16.5
           from: "{{colrow}}"
           to: "{{column_net}}"
-      choc_enter:
-        what: chocmini
-        where:
-          - [/^mirror.*/, key, enter]
+      choc_1_5u:
+        what: choc
+        where: 
+          - [/^mirror.*/, 1_5u]
+          - [/rightcluster_.*/, 1_5u]
+          - [/right.*/, 1_5u]
         params:
           keycaps: true
           reverse: false
+          hotswap: true
+          keycaps_x: cfx_x_1_5u
+          keycaps_y: 16.5
           from: "{{colrow}}"
           to: "{{column_net}}"
-        adjust:
-          rotate: 270
+      choc_space:
+        what: choc
+        where: 
+          - [/^mirror.*/, key, -1_5u, space]
+        params:
+          keycaps: true
+          reverse: false
+          hotswap: true
+          keycaps_x: cfx_x_space
+          keycaps_y: 16.5
+          from: "{{colrow}}"
+          to: "{{column_net}}"
       diode:
         what: diode
         where:
-          - [/^mirror.*/, key, -enter]
+          - [/^mirror.*/, key]
           - /rightcluster_.*/
         params:
           from: "{{colrow}}"
@@ -631,68 +523,6 @@ pcbs:
         adjust:
           shift: [1.4, -6]
           rotate: 180
-      diode_enters:
-        what: diode
-        where:
-          - [/^mirror.*/, key, enter]
-        params:
-          from: "{{colrow}}"
-          to: "{{row_net}}"
-          tht: false # No through hole
-          side: B # Bottom only
-        adjust:
-          shift: [-6, -1.4]
-          rotate: 90
-      backlight:
-        what: diode ## Fixme use LED
-        where:
-          - [/^mirror.*/, key, -enter]
-          - /rightcluster_.*/
-        params:
-          from: "bl_{{colrow}}{{row_net}}"
-          to: GND
-          tht: false # No through hole
-          side: F # Top only
-        adjust:
-          shift: [0, 4.3]
-          rotate: 0
-      backlight_enters:
-        what: diode ## Fixme use LED
-        where:
-          - [/^mirror.*/, key, enter]
-        params:
-          from: "bl_{{colrow}}{{row_net}}"
-          to: GND
-          tht: false # No through hole
-          side: F # Top only
-        adjust:
-          shift: [4.3, 0]
-          rotate: 270
-      resistor_backlight:
-        what: diode ## Fixme use Resistor
-        where:
-          - [/^mirror.*/, key, -enter]
-          - /rightcluster_.*/
-        params:
-          from: "bl_{{colrow}}{{row_net}}"
-          to: bl_pwr
-          tht: false # No through hole
-          side: B # Bottom only
-        adjust:
-          shift: [0, 4.3]
-          rotate: 0
-      resistor_backlight_enters:
-        what: diode ## Fixme use resistor
-        where:
-          - [/^mirror.*/, key, enter]
-        params:
-          from: "bl_{{colrow}}{{row_net}}"
-          to: bl_pwr
-          tht: false # No through hole
-          side: B # Bottom only
-        adjust:
-          shift: [4.3, 0]
-          rotate: 270
       # Controller Area
       promicro:
         what: promicro

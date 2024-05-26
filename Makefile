@@ -28,7 +28,7 @@ output/routed_pcbs/%.kicad_pcb: output/routed_pcbs/%.ses output/pcbs/%.kicad_pcb
 	if [ -f "$@" ] ; then rm -f $@ ; fi
 	${container_cmd} run ${container_args} soundmonster/kicad-automation-scripts:latest /usr/lib/python2.7/dist-packages/kicad-automation/pcbnew_automation/import_ses.py output/pcbs/$*.kicad_pcb $< --output-file $@
 
-output/routed_pcbs/%-drc/: output/routed_pcbs/%.kicad_pcb
+output/routed_pcbs/%-drc/drc_result.rpt: output/routed_pcbs/%.kicad_pcb
 	mkdir -p $@
 	${container_cmd} run ${container_args} soundmonster/kicad-automation-scripts:latest /usr/lib/python2.7/dist-packages/kicad-automation/pcbnew_automation/run_drc.py  $< $@
 

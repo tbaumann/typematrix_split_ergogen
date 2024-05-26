@@ -3,7 +3,7 @@
 [![Build](https://github.com/tbaumann/typematrix_split_ergogen/actions/workflows/build.yml/badge.svg)](https://github.com/tbaumann/typematrix_split_ergogen/actions/workflows/build.yml)
 
 ## Layout
-The Typematrix 2022 was one of the first ortholinear ergo keyboards and arguably the best layout ever made `[citation needed]`
+The Typematrix 2020 was one of the first ortholinear ergo keyboards and arguably the best layout ever made `[citation needed]`
 
 See [An evaluation of the TypeMatrix ergonomic keyboard](http://www.typematrix.com/documents/TypeMatrix_study.pdf)
 left | right
@@ -21,8 +21,8 @@ The interesting thing about this keyboard is that it's a declarative design:
 
 ## Features
 
-* **Typematrix 2022** inspired split layout
-* **Kailh Choc PG1232** choc mini, ulta low profile key switches
+* **Typematrix 2020** inspired split layout
+* **Kailh Choc PG1350** choc mini, low profile key switches
 * [Nice!nano](https://nicekeyboards.com/nice-nano) optimised, but any promicro should work (bottom up) 
 * [Nice!view](https://nicekeyboards.com/nice-view) support
   
@@ -31,13 +31,10 @@ The interesting thing about this keyboard is that it's a declarative design:
 * Top plate generation
 * Bottom Plate (Thick PCB with cutouts for all components placed at the bottom. Optimised for maximum thinness)
 * Remove or document magic numbers
-* Backlight
-* 3D models for 2x1.5u big enter key caps
 * SMD footrints
 * Better nice!nano footprint, steal from https://github.com/bstiq/nice-nano-kicad
 * Middle bracked PCB with touchpad (Holds both halves together rigidly)
-* Align board edges with actual keycap size
-* stabilizer cutouts (Kailh says stabilizers are not supported for PG1232! :worried:) Needs more research...
+* stabilizer cutouts Needs more research...
   Thanks https://github.com/jasonhazel for measuring the ChocFox WOB 3u spacebar stabilizer spacing. (40mm)
 
 ## How to
