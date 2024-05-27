@@ -429,7 +429,7 @@ pcbs:
           P15: "C4" # Column
           P14: "C5" # Column
           P16: "C6" # Column
-          P10: "F10" # Free
+#          P10: "F10" # Free
 
         where:
           ref: mcu
@@ -438,7 +438,7 @@ pcbs:
       display:
         what: nice_view
         params:
-          reverse: true
+          reverse: false
           MOSI: DPD
           SCK: DPC
           CS: DPE
@@ -554,7 +554,7 @@ pcbs:
           P15: "C4" # Column
           P14: "C5" # Column
           P16: "C6" # Column
-          P10: "C7" # Column
+#          P10: "C7" # Column
 
         where:
           ref: mirror_mcu
@@ -564,7 +564,7 @@ pcbs:
       display:
         what: nice_view
         params:
-          reverse: true
+          reverse: false
           MOSI: DPD
           SCK: DPC
           CS: DPE
