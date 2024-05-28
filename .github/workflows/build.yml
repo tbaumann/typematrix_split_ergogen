@@ -23,6 +23,25 @@ jobs:
         run: npm install
       - name: Generate unrouted PCBs
         run: npm run gen
+      - name: render left pcb image
+        uses: linalinn/kicad-render@main
+        with:
+          pcb_file: output/pcbs/left.kicad_pcb
+          output_path: ${{ github.workspace }}/images
+      - name: render right pcb image
+        uses: linalinn/kicad-render@main
+        with:
+          pcb_file: output/pcbs/right.kicad_pcb
+          output_path: ${{ github.workspace }}/images
+      - name: Setup Pages
+        if: github.ref == 'refs/heads/main'
+        uses: actions/configure-pages@v3
+
+      - name: Upload Artifact
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: "images"
       - name: Export DSN 
         uses: ./.github/actions/export-dsn
         with:
@@ -48,3 +67,20 @@ jobs:
         with:
           name: routed-pcbs-and-gerbers
           path: output
+  deploy-pages:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: generate
+      
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
