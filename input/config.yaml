@@ -21,14 +21,11 @@ units:
   font_yo: 0.5 * font_y
 
   # Nice Nano
-  # The nice nano footprint's center doesn't account
-  # for the 2.54mm "overhang" of the PCB beyond the pins.
-  mcu_overhang_y: 2.54
   mcu_spacing_x: 2.72
   mcu_x: 17.78 + mcu_spacing_x
-  mcu_y: 30.48 + mcu_overhang_y
+  mcu_y: 33.02
   mcu_xo: 0.5 * mcu_x
-  mcu_yo: 0.5 * mcu_y + 0.5 * mcu_overhang_y
+  mcu_yo: 0.5 * mcu_y  
 
   # Nice!View display
   disp_x: 14
@@ -228,7 +225,7 @@ points:
     controller:
       anchor:
         ref: matrix_enter_f
-        shift: [cfx_x_1_5u/2 + mcu_xo +1, kyo -2.25 - mcu_yo]
+        shift: [cfx_x_1_5u/2 + mcu_xo, kyo - mcu_yo]
       key:
         name: mcu
         width: mcu_x
@@ -340,52 +337,56 @@ outlines:
 
 pcbs:
   left:
+    template: kicad8
     outlines:
       left:
         outline: pcb_left
     footprints:
       choc:
-        what: choc
+        what: ceoloide/switch_choc_v1_v2
         where:
           - [/^matrix_.*/, key, -1_5u]
           - [/^spaces_.*/, key, -space]
         params:
-          keycaps: true
-          reverse: false
+          include_keycap: true
+          choc_v2_support: false
+          solder: true
           hotswap: true
-          keycaps_x: 16.5
-          keycaps_y: 16.5
+          keycap_width: 16.5
+          keycap_height: 16.5
           from: "{{colrow}}"
           to: "{{column_net}}"
       choc_1_5u:
-        what: choc
+        what: ceoloide/switch_choc_v1_v2
         where:
           - [/^matrix_.*/, 1_5u]
           - /leftcluster_.*/
         params:
-          keycaps: true
-          reverse: false
+          include_keycap: true
+          choc_v2_support: false
+          solder: true
           hotswap: true
           from: "{{colrow}}"
           to: "{{column_net}}"
-          keycaps_x: cfx_x_1_5u
-          keycaps_y: 16.5
+          keycap_width: cfx_x_1_5u
+          keycap_height: 16.5
       choc_space:
-        what: choc
+        what: ceoloide/switch_choc_v1_v2
         where: 
           - [/^spaces_.*/, key, -1_5u, space]
 
         params:
-          keycaps: true
-          reverse: false
+          include_keycap: true
+          choc_v2_support: false
+          solder: true
           hotswap: true
-          keycaps_x: cfx_x_space
+          keycap_width: cfx_x_space
 
-          keycaps_y: 16.5
+          keycap_height: 16.5
           from: "{{colrow}}"
           to: "{{column_net}}"
       diode:
-        what: diode
+        what: ceoloide/diode_tht_sod123
         where:
           - /^matrix_.*/
           - /leftcluster_.*/
@@ -393,15 +394,16 @@ pcbs:
         params:
           from: "{{colrow}}"
           to: "{{row_net}}"
-          tht: false # No through hole
           side: B # Bottom only
         adjust:
           shift: [-1.4, -6]
           rotate: 180
       # Controller Area
       promicro:
-        what: promicro
+        what: ceoloide/mcu_nice_nano
         params:
+          reverse_mount: true
+          include_extra_pins: true
           # Pin Assignments (Controller on top facing down)
           # Right Side
           P0: "DPD" # Display Data
@@ -418,7 +420,7 @@ pcbs:
           P9: "R7" # Row
 
           # Left Side
-          RAW: "BAT_P" # Battery Pos
+          # RAW:      # Battery Pos
           # GND       # Ground / Battery Neg
           # RST       # Reset pin
           # VCC       # External Power
@@ -434,99 +436,110 @@ pcbs:
         where:
           ref: mcu
           shift: [0, 0]
-          rotate: -90
       display:
-        what: nice_view
+        what: ceoloide/display_nice_view
         params:
-          reverse: false
           MOSI: DPD
           SCK: DPC
           CS: DPE
-          show_labels: false
-          jumpers_at_bottom: false
         where:
           ref: mcu
-          shift: [0, -1] # Move the display down a bit to be sure the cable fits between the headers
+          shift: [0, -1.5] # Move the display down a bit to be sure the cable fits between the headers
       pads_bat:
-        what: jstph
+        what: ceoloide/battery_connector_jst_ph_2
         params:
-          pos: BAT_P
-          neg: GND
         where:
           ref: mcu
-          shift: [-batc_x, -mcu_y/2 - 5]
+          shift: [-batc_x, -mcu_y/2 - 6]
           #rotate: 270
       reset:
-        what: button
+        what: ceoloide/reset_switch_smd_side
         params:
+          side: B
           from: GND
           to: RST
         where:
-          ref: mcu
-          shift: [batc_x, -mcu_y/2 - 8]
+          ref: matrix_enter_f
+          shift: [cfx_x_1_5u/2 + mcu_xo - 10, ky * 0.5 - 2]
+      power:
+        what: ceoloide/power_switch_smd_side
+        params:
+          side: B
+          #          from: GND
+          #          to: RST
+        adjust:
+          rotate: 90
+        where:
+          ref: matrix_enter_f
+          shift: [cfx_x_1_5u/2 + mcu_xo, ky * 0.5 - 1.5]
 
   right:
+    template: kicad8
     outlines:
       right:
         outline: pcb_right
     footprints:
       choc:
-        what: choc
+        what: ceoloide/switch_choc_v1_v2
         where:
           - [/^mirror.*/, key, -1_5u, -space]
           - /rightcluster_.*/
         
         params:
-          keycaps: true
-          reverse: false
+          include_keycap: true
+          choc_v2_support: false
+          solder: true
           hotswap: true
-          keycaps_x: 16.5
-          keycaps_y: 16.5
+          keycap_width: 16.5
+          keycap_height: 16.5
           from: "{{colrow}}"
           to: "{{column_net}}"
       choc_1_5u:
-        what: choc
+        what: ceoloide/switch_choc_v1_v2
         where: 
           - [/^mirror.*/, 1_5u]
           - [/rightcluster_.*/, 1_5u]
           - [/right.*/, 1_5u]
         params:
-          keycaps: true
-          reverse: false
+          include_keycap: true
+          choc_v2_support: false
+          solder: true
           hotswap: true
-          keycaps_x: cfx_x_1_5u
-          keycaps_y: 16.5
+          keycap_width: cfx_x_1_5u
+          keycap_height: 16.5
           from: "{{colrow}}"
           to: "{{column_net}}"
       choc_space:
-        what: choc
+        what: ceoloide/switch_choc_v1_v2
         where: 
           - [/^mirror.*/, key, -1_5u, space]
         params:
-          keycaps: true
-          reverse: false
+          include_keycap: true
+          choc_v2_support: false
+          solder: true
           hotswap: true
-          keycaps_x: cfx_x_space
-          keycaps_y: 16.5
+          keycap_width: cfx_x_space
+          keycap_height: 16.5
           from: "{{colrow}}"
           to: "{{column_net}}"
       diode:
-        what: diode
+        what: ceoloide/diode_tht_sod123
         where:
           - [/^mirror.*/, key]
           - /rightcluster_.*/
         params:
           from: "{{colrow}}"
           to: "{{row_net}}"
-          tht: false # No through hole
           side: B # Bottom only
         adjust:
           shift: [1.4, -6]
           rotate: 180
       # Controller Area
       promicro:
-        what: promicro
+        what: ceoloide/mcu_nice_nano
         params:
+          reverse_mount: true
+          include_extra_pins: true
           # Pin Assignments (Controller on top facing down)
           # Right Side
           P0: "DPD" # Display Data
@@ -543,7 +556,7 @@ pcbs:
           P9: "R7" # Row
 
           # Left Side
-          RAW: "BAT_P" # Battery Pos
+          # RAW:      # Battery Pos
           # GND       # Ground / Battery Neg
           # RST       # Reset pin
           # VCC       # External Power
@@ -559,34 +572,45 @@ pcbs:
         where:
           ref: mirror_mcu
           shift: [0, 0]
-          rotate: 90
 
       display:
-        what: nice_view
+        what: ceoloide/display_nice_view
         params:
-          reverse: false
           MOSI: DPD
           SCK: DPC
           CS: DPE
-          show_labels: false
-          jumpers_at_bottom: false
         where:
           ref: mirror_mcu
-          shift: [0, -1] # Move the display down a bit to be sure the cable fits between the headers
+          shift: [0, -1.5] # Move the display down a bit to be sure the cable fits between the headers
       pads_bat:
-        what: jstph
+        what: ceoloide/battery_connector_jst_ph_2
         params:
-          pos: BAT_P
-          neg: GND
         where:
           ref: mirror_mcu
-          shift: [-batc_x, -mcu_y/2 - 5]
+          shift: [-batc_x, -mcu_y/2 - 6]
           #rotate: 270
       reset:
-        what: button
+        what: ceoloide/reset_switch_smd_side
         params:
+          side: B
           from: GND
           to: RST
         where:
+          ref: mirror_matrix_enter_f
+          shift: [cfx_x_1_5u/2 + mcu_xo - 10, ky * 0.5 - 2]
+      power:
+        what: ceoloide/power_switch_smd_side
+        params:
+          side: B
+          #          from: GND
+          #          to: RST
+        adjust:
+          rotate: -90
+        where:
+          ref: mirror_matrix_enter_f
+          shift: [cfx_x_1_5u/2 + mcu_xo, ky * 0.5 - 1.5]
+      logo:
+        what: ceoloide/utility_ergogen_logo
+        where:
           ref: mirror_mcu
-          shift: [batc_x, -mcu_y/2 - 8]
+          shift: [-batc_x, -mcu_y/2 - 15]
